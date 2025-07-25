@@ -1,0 +1,27 @@
+@font-face {
+	font-family: "PFBulletinSansProRegular";
+	src: url("./fonts/PFBulletinSansPro/PFBulletinSansPro-Regular.eot");
+	src:
+		local("PFBulletinSansPro-Regular"),
+		url("./fonts/PFBulletinSansPro/PFBulletinSansPro-Regular.eot?#iefix")
+			format("embedded-opentype"),
+		url("./fonts/PFBulletinSansPro/PFBulletinSansPro-Regular.woff2") format("woff2"),
+		url("./fonts/PFBulletinSansPro/PFBulletinSansPro-Regular.woff") format("woff"),
+		url("./fonts/PFBulletinSansPro/PFBulletinSansPro-Regular.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "PFBulletinSansProLight";
+	src: url("./fonts/PFBulletinSansPro/PFBulletinSansPro-Light.eot");
+	src:
+		local("PFBulletinSansPro-Light"),
+		url("./fonts/PFBulletinSansPro/PFBulletinSansPro-Light.eot?#iefix")
+			format("embedded-opentype"),
+		url("./fonts/PFBulletinSansPro/PFBulletinSansPro-Light.woff2") format("woff2"),
+		url("./fonts/PFBulletinSansPro/PFBulletinSansPro-Light.woff") format("woff"),
+		url("./fonts/PFBulletinSansPro/PFBulletinSansPro-Light.ttf") format("truetype");
+	font-weight: 300;
+	font-style: normal;
+}
