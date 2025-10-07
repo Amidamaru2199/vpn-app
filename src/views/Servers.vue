@@ -1,51 +1,42 @@
 <template>
     <div class="tarifes container">
         <h3 class="tarifes__title">Сервера</h3>
-        <p class="tarifes__subtitle">Нажмитие на сервер, что бы сменить страну</p>
+        <p class="tarifes__subtitle">Здесь вы можете скопировать ключ сервера и изменить набор стран своей подписки</p>
         <div class="tarifes__links">
-            <a class="servers__link" href="#">
+            <!-- <a class="servers__link" href="#">
                 <VoprosSVG />
                 Как сменить сервер
                 <LinkSVG />
-            </a>
+            </a> -->
             <button class="servers__link" @click="toggleEditMode">
                 <Pencel />
-                {{ isEditMode ? 'Готово' : 'Редактировать' }}
+                {{ isEditMode ? 'Готово /user/keys/:tg_id' : 'Редактировать набор серверов в подписке' }}
             </button>
-            <!-- Обычный режим - router-link -->
-            <router-link 
-                v-for="server in servers" 
-                v-if="!isEditMode"
-                :key="server.id"
-                class="router-link" 
-                :class="{ 'router-link_active': server.selected }"
-                to="/vpn-app/tarifes"
-            >
+
+            <div class="servers__link-container" v-for="server in servers" :key="server.id">
+                <button class="servers__link">
+                    <Pencel />
+                </button>
+                <router-link v-if="!isEditMode" class="router-link"
+                    :class="{ 'router-link_active': server.selected }" to="/vpn-app/tarifes">
+                    <img :src="server.flag" :alt="server.country">
+                    <span class="router-link__text">
+                        <span class="router-link__duration">{{ server.country }}</span>
+                        <span class="router-link__price">{{ server.city }}</span>
+                    </span>
+                    <CircleArrowSVG />
+                </router-link>
+            </div>
+
+            <div v-for="server in servers" v-if="isEditMode" :key="`edit-${server.id}`" class="router-link"
+                :class="{ 'router-link_active': server.selected }">
                 <img :src="server.flag" :alt="server.country">
                 <span class="router-link__text">
                     <span class="router-link__duration">{{ server.country }}</span>
                     <span class="router-link__price">{{ server.city }}</span>
                 </span>
-                <CircleArrowSVG />
-            </router-link>
-            
-            <!-- Режим редактирования - div с чекбоксами -->
-            <div 
-                v-for="server in servers" 
-                v-if="isEditMode"
-                :key="`edit-${server.id}`"
-                class="router-link" 
-                :class="{ 'router-link_active': server.selected }"
-            >
-                <img :src="server.flag" :alt="server.country">
-                <span class="router-link__text">
-                    <span class="router-link__duration">{{ server.country }}</span>
-                    <span class="router-link__price">{{ server.city }}</span>
-                </span>
-                <Checkbox 
-                    :modelValue="server.selected"
-                    @update:modelValue="(value) => handleServerSelect(server.id, value)"
-                />
+                <Checkbox :modelValue="server.selected"
+                    @update:modelValue="(value) => handleServerSelect(server.id, value)" />
             </div>
         </div>
     </div>
@@ -108,11 +99,17 @@ onMounted(() => {
     flex-direction: column;
     min-height: 100vh;
 
+    .servers__link-container {
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        gap: 10px;
+    }
+
     .servers__link {
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        height: 42px;
+        height: 52px;
         width: 100%;
         color: #fff;
         background: transparent;
@@ -145,7 +142,7 @@ onMounted(() => {
             }
         }
     }
-    
+
     .tarifes__title {
         font-size: 24px;
         line-height: 150%;
@@ -191,7 +188,7 @@ onMounted(() => {
                 color: #fff;
             }
         }
-        
+
 
         &:first-of-type {
             &::before {
@@ -210,7 +207,7 @@ onMounted(() => {
             }
         }
 
-        & > span {
+        &>span {
             margin: 0 auto 0 10px;
         }
 

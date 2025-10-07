@@ -9,12 +9,20 @@
 import ParticleImage from "../components/ParticleImage.vue";
 import HomeLinks from "../components/HomeLinks.vue";
 import { onMounted } from "vue";
+import { useTelegram } from "../composables/useTelegram";
+
+const { hideBackButton, initTelegram, userId } = useTelegram();
 
 onMounted(() => {
-    const tg = window.Telegram?.WebApp;
-
-    if (tg) {
-        tg.BackButton.hide();
+    // Инициализируем Telegram WebApp
+    initTelegram();
+    
+    // Скрываем кнопку "Назад" на главной странице
+    hideBackButton();
+    
+    // Получаем ID пользователя для дальнейшего использования
+    if (userId.value) {
+        console.log('User ID:', userId.value);
     }
 });
 </script>

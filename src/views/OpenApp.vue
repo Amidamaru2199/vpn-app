@@ -30,12 +30,16 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useTelegram } from '../composables/useTelegram'
 
 const route = useRoute()
 const config = ref('')
 const appURL = ref('')
 const error = ref('')
 const currentPlatform = ref('')
+
+// Telegram пользователь
+const { user: telegramUser, userId: telegramId, initTelegram } = useTelegram()
 
 const detectPlatform = () => {
 	const userAgent = navigator.userAgent || navigator.vendor || window.opera
@@ -58,8 +62,18 @@ const isAndroid = computed(() => currentPlatform.value === 'android')
 const isMacOS = computed(() => currentPlatform.value === 'macos')
 const isApplePlatform = computed(() => isIOS.value || isMacOS.value)
 
-onMounted(() => {
+onMounted(async () => {
 	detectPlatform()
+	
+	// Инициализируем Telegram WebApp
+	initTelegram()
+	
+	// Выводим ID пользователя (если нужно)
+	if (telegramId.value) {
+		console.log('Telegram User ID:', telegramId.value)
+		console.log('Telegram User:', telegramUser.value)
+	}
+	
 	const key = route.query.key
 	const platform = route.query.platform
 
@@ -69,11 +83,30 @@ onMounted(() => {
 	}
 
 	try {
-		config.value = decodeURIComponent(key)
+		const decodedKey = decodeURIComponent(key)
 		const platformFromQuery = platform.toLowerCase()
 
 		if (['ios', 'android', 'macos'].includes(platformFromQuery)) {
 			currentPlatform.value = platformFromQuery
+		}
+
+		// Проверяем, является ли key URL-адресом для получения конфигурации
+		if (decodedKey.startsWith('http://') || decodedKey.startsWith('https://')) {
+			console.log('Fetching config from URL:', decodedKey)
+			
+			try {
+				const response = await fetch(decodedKey)
+				const configData = await response.text()
+				config.value = configData
+				console.log('Config fetched successfully')
+			} catch (fetchError) {
+				error.value = 'Ошибка загрузки конфигурации с сервера: ' + fetchError.message
+				console.error('Fetch error:', fetchError)
+				return
+			}
+		} else {
+			// Это прямая конфигурация vless://
+			config.value = decodedKey
 		}
 
 		if (isApplePlatform.value) {
