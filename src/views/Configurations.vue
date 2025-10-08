@@ -1,6 +1,6 @@
 <template>
 	<div class="configurations container">
-		<h3 class="configurations__title">Настройка VPN на устройстве 3</h3>
+		<h3 class="configurations__title">Настройка VPN на устройстве</h3>
 		<p class="configurations__subtitle">Всего пару шагов и можно пользоваться</p>
 		<div class="configurations__box">
 			<p class="configurations__box-description">1. Скачайте и откройте V2Raytun, а затем вернитесь к текущему

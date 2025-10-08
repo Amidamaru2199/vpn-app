@@ -1,7 +1,7 @@
 <template>
 	<div class="openapp container">
 		<img class="openapp__logo" src="/img/atom.png" alt="v2raytun">
-		<h2 class="openapp__title">Если приложение v2Raytun не открылось 4</h2>
+		<h2 class="openapp__title">Если приложение v2Raytun не открылось</h2>
 		<p class="openapp__subtitle">Убедитесь, что оно установлено, или скопируйте и вставьте ключ вручную.</p>
 
 		<button @click="openApp" class="openapp__button openapp__button--green">
