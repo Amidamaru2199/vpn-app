@@ -18,7 +18,7 @@
                     <Pencel />
                 </button>
                 <router-link v-if="!isEditMode" class="router-link"
-                    :class="{ 'router-link_active': server.selected }" to="/vpn-app/tarifes">
+                    :class="{ 'router-link_active': server.selected }" to="/tarifes">
                     <img :src="server.flag" :alt="server.country">
                     <span class="router-link__text">
                         <span class="router-link__duration">{{ server.country }}</span>

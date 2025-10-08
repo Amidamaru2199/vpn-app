@@ -1,18 +1,18 @@
 <template>
 	<div class="openapp container">
 		<img class="openapp__logo" src="/img/atom.png" alt="v2raytun">
-		<h2 class="openapp__title">Если приложение v2Raytun не открылось</h2>
+		<h2 class="openapp__title">Если приложение v2Raytun не открылось 4</h2>
 		<p class="openapp__subtitle">Убедитесь, что оно установлено, или скопируйте и вставьте ключ вручную.</p>
 
-		<button @click="openApp" class="openapp__button">
+		<button @click="openApp" class="openapp__button openapp__button--green">
 			Попробовать снова
 		</button>
 
-		<button @click="copyConfig" class="openapp__button">
+		<button @click="copyConfig" class="openapp__button openapp__button--blue">
 			Скопировать ключ
 		</button>
 
-		<button @click="openAppStore" class="openapp__button">
+		<button @click="openStore" class="openapp__button">
 			Установить v2Raytun
 		</button>
 
@@ -28,146 +28,74 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useTelegram } from '../composables/useTelegram'
+import { usePlatform } from '../composables/usePlatform'
+import { useClipboard } from '../composables/useClipboard'
 
 const route = useRoute()
 const config = ref('')
 const appURL = ref('')
 const error = ref('')
-const currentPlatform = ref('')
+const isLoading = ref(false)
 
-// Telegram пользователь
-const { user: telegramUser, userId: telegramId, initTelegram } = useTelegram()
-
-const detectPlatform = () => {
-	const userAgent = navigator.userAgent || navigator.vendor || window.opera
-
-	if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-		currentPlatform.value = 'ios'
-	}
-
-	else if (/android/i.test(userAgent)) {
-		currentPlatform.value = 'android'
-	}
-
-	else if (/Macintosh|Mac OS X/.test(userAgent)) {
-		currentPlatform.value = 'macos'
-	}
-}
-
-const isIOS = computed(() => currentPlatform.value === 'ios')
-const isAndroid = computed(() => currentPlatform.value === 'android')
-const isMacOS = computed(() => currentPlatform.value === 'macos')
-const isApplePlatform = computed(() => isIOS.value || isMacOS.value)
+const { initTelegram } = useTelegram()
+const { currentPlatform, isApplePlatform, isAndroid, openAppStore: openStore } = usePlatform()
+const { copyToClipboard } = useClipboard()
 
 onMounted(async () => {
-	detectPlatform()
-	
-	// Инициализируем Telegram WebApp
 	initTelegram()
-	
-	// Выводим ID пользователя (если нужно)
-	if (telegramId.value) {
-		console.log('Telegram User ID:', telegramId.value)
-		console.log('Telegram User:', telegramUser.value)
-	}
-	
+
 	const key = route.query.key
 	const platform = route.query.platform
 
 	if (!key || !platform) {
-		error.value = 'Missing required parameters: key and platform'
+		error.value = 'Отсутствуют обязательные параметры: ключ и платформа.'
 		return
 	}
 
 	try {
-		const decodedKey = decodeURIComponent(key)
-		const platformFromQuery = platform.toLowerCase()
-
-		if (['ios', 'android', 'macos'].includes(platformFromQuery)) {
-			currentPlatform.value = platformFromQuery
-		}
-
-		// Проверяем, является ли key URL-адресом для получения конфигурации
-		if (decodedKey.startsWith('http://') || decodedKey.startsWith('https://')) {
-			console.log('Fetching config from URL:', decodedKey)
-			
-			try {
-				const response = await fetch(decodedKey)
-				const configData = await response.text()
-				config.value = configData
-				console.log('Config fetched successfully')
-			} catch (fetchError) {
-				error.value = 'Ошибка загрузки конфигурации с сервера: ' + fetchError.message
-				console.error('Fetch error:', fetchError)
-				return
-			}
-		} else {
-			// Это прямая конфигурация vless://
-			config.value = decodedKey
-		}
-
-		if (isApplePlatform.value) {
-			appURL.value = `v2raytun://import/${encodeURIComponent(config.value)}`
-		} else if (isAndroid.value) {
-			appURL.value = `intent://import/${encodeURIComponent(config.value)}#Intent;scheme=v2raytun;package=com.v2raytun.android;end`
-		} else {
-			error.value = `Unsupported platform: ${platform}`
+		isLoading.value = true
+		
+		const platformLower = platform.toLowerCase()
+		if (!['ios', 'android', 'macos'].includes(platformLower)) {
+			error.value = `Неподдерживаемая платформа: ${platform}`
+			isLoading.value = false
 			return
 		}
+		currentPlatform.value = platformLower
+
+		config.value = key
+
+		if (isApplePlatform.value) {
+			appURL.value = `v2raytun://import/${key}`
+		} else if (isAndroid.value) {
+			appURL.value = `intent://import/${key}#Intent;scheme=v2raytun;package=com.v2raytun.android;end`
+		}
+
+		isLoading.value = false
 
 		setTimeout(() => {
 			if (appURL.value && !error.value) {
 				window.location.href = appURL.value
 			}
-		}, 100)
+		}, 500)
 
 	} catch (err) {
 		error.value = 'Error processing configuration: ' + err.message
+		isLoading.value = false
+		console.error('Error:', err)
 	}
 })
 
 const openApp = () => {
 	if (!appURL.value || error.value) return
-
-	try {
-		window.location.href = appURL.value
-
-	} catch (err) {
-		console.error('Error opening app:', err)
-	}
+	window.location.href = appURL.value
 }
 
-const openAppStore = () => {
-	if (isApplePlatform.value) {
-		window.open('https://apps.apple.com/ru/app/v2raytun/id6476628951', '_blank')
-	} else if (isAndroid.value) {
-		window.open('https://play.google.com/store/apps/details?id=com.v2raytun.android', '_blank')
-	} else {
-		const choice = confirm('Выберите магазин приложений:\nOK - App Store (iOS/macOS)\nCancel - Google Play (Android)')
-		if (choice) {
-			window.open('https://apps.apple.com/ru/app/v2raytun/id6476628951', '_blank')
-		} else {
-			window.open('https://play.google.com/store/apps/details?id=com.v2raytun.android', '_blank')
-		}
-	}
-}
-
-const copyConfig = async () => {
-	try {
-		await navigator.clipboard.writeText(config.value)
-		alert('Ссылка скопирована. Откройте ее в приложении вручную.')
-	} catch (err) {
-		const textArea = document.createElement('textarea')
-		textArea.value = config.value
-		document.body.appendChild(textArea)
-		textArea.select()
-		document.execCommand('copy')
-		document.body.removeChild(textArea)
-		alert('Ссылка скопирована. Откройте ее в приложении вручную.')
-	}
+const copyConfig = () => {
+	copyToClipboard(config.value, 'Ссылка скопирована. Откройте ее в приложении вручную.')
 }
 </script>
 
@@ -214,9 +142,31 @@ const copyConfig = async () => {
 		min-width: 210px;
 		background: linear-gradient(135deg, #ff416c 0%, #6a82fb 100%);
 		box-shadow: 0 4px 15px rgba(106, 130, 251, 0.3);
+		text-decoration: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
 		&:hover {
 			box-shadow: 0 0px 30px rgba(106, 130, 251, 0.5);
+		}
+
+		&--green {
+			background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+			box-shadow: 0 4px 15px rgba(56, 239, 125, 0.3);
+
+			&:hover {
+				box-shadow: 0 0px 30px rgba(56, 239, 125, 0.5);
+			}
+		}
+
+		&--blue {
+			background: linear-gradient(135deg, #281199 0%, #3853ef 100%);
+			box-shadow: 0 4px 15px rgba(69, 5, 206, 0.3);
+
+			&:hover {
+				box-shadow: 0 0px 30px rgba(69, 5, 206, 0.5);
+			}
 		}
 	}
 

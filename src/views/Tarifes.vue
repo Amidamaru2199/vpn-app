@@ -3,21 +3,21 @@
         <h3 class="tarifes__title">Быстрая настройка</h3>
         <p class="tarifes__subtitle">Процесс первичной настройки</p>
         <div class="tarifes__links">
-            <router-link class="router-link" to="/vpn-app/tarifes">
+            <router-link class="router-link" to="/tarifes">
                 <span class="router-link__text">
                     <span class="router-link__duration">На 1 месяц за 99 руб.</span>
                     <span class="router-link__price">99 руб в месяц</span>
                 </span>
                 <CircleArrowSVG />
             </router-link>
-            <router-link class="router-link" to="/vpn-app/tarifes">
+            <router-link class="router-link" to="/tarifes">
                 <span class="router-link__text">
                     <span class="router-link__duration">На 2 месяца за 199 руб.</span>
                     <span class="router-link__price">199 руб. в месяц</span>
                 </span>
                 <CircleArrowSVG />
             </router-link>
-            <router-link class="router-link" to="/vpn-app/tarifes">
+            <router-link class="router-link" to="/tarifes">
                 <span class="router-link__text">
                     <span class="router-link__duration">На 6 месяцев за 399 руб.</span>
                     <span class="router-link__price">99 руб. в месяц</span>

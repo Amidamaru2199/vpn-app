@@ -1,132 +1,79 @@
 <template>
 	<div class="configurations container">
-		<h3 class="configurations__title">Настройка VPN на устройстве</h3>
+		<h3 class="configurations__title">Настройка VPN на устройстве 3</h3>
 		<p class="configurations__subtitle">Всего пару шагов и можно пользоваться</p>
 		<div class="configurations__box">
-			<p class="configurations__box-description">1. Скачайте и откройте V2Raytun, а затем вернитесь к текущему экрану</p>
-			<button class="configurations__box-button" @click="openAppStore">Скачать</button>
+			<p class="configurations__box-description">1. Скачайте и откройте V2Raytun, а затем вернитесь к текущему
+				экрану</p>
+			<button class="configurations__box-button" @click="openStore">Скачать</button>
 			<p class="configurations__box-description">2. Добавьте подписку в V2Raytun</p>
 			<button class="configurations__box-button" @click="installProfile">Добавить</button>
-			<p class="configurations__box-description">3. И все! Нажмите на кнопку подключения в V2Raytun и забудьте об ограничениях</p>
+			<p class="configurations__box-description">3. И все! Нажмите на кнопку подключения в V2Raytun и забудьте об
+				ограничениях</p>
 		</div>
 		<div class="configurations__box">
 			<h3 class="configurations__title">Добавить подписку вручную</h3>
-			<button class="configurations__box-button" @click="copySubscriptionLink">Скопировать ссылку на подписку</button>
+			<button class="configurations__box-button" @click="copySubscriptionLink">Скопировать ссылку на
+				подписку</button>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useTelegram } from '../composables/useTelegram'
+import { usePlatform } from '../composables/usePlatform'
+import { useClipboard } from '../composables/useClipboard'
+
+const router = useRouter()
 
 const { userId, initTelegram, showBackButton } = useTelegram()
+const { currentPlatform, detectPlatform, openAppStore: openStore } = usePlatform()
+const { copyToClipboard } = useClipboard()
 
-// Определение платформы устройства
-const currentPlatform = ref('')
-
-// Функция для определения платформы
-const detectPlatform = () => {
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera
-    
-    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        currentPlatform.value = 'ios'
-    }
-    else if (/android/i.test(userAgent)) {
-        currentPlatform.value = 'android'
-    }
-    else if (/Macintosh|Mac OS X/.test(userAgent)) {
-        currentPlatform.value = 'macos'
-    }
-}
-
-const isIOS = computed(() => currentPlatform.value === 'ios')
-const isAndroid = computed(() => currentPlatform.value === 'android')
-const isMacOS = computed(() => currentPlatform.value === 'macos')
-const isApplePlatform = computed(() => isIOS.value || isMacOS.value)
-
-// Функция для открытия магазина приложений
-const openAppStore = () => {
-    if (isApplePlatform.value) {
-        window.open('https://apps.apple.com/ru/app/v2raytun/id6476628951', '_blank')
-    } else if (isAndroid.value) {
-        window.open('https://play.google.com/store/apps/details?id=com.v2raytun.android', '_blank')
-    } else {
-        const choice = confirm('Выберите магазин приложений:\nOK - App Store (iOS/macOS)\nCancel - Google Play (Android)')
-        if (choice) {
-            window.open('https://apps.apple.com/ru/app/v2raytun/id6476628951', '_blank')
-        } else {
-            window.open('https://play.google.com/store/apps/details?id=com.v2raytun.android', '_blank')
-        }
-    }
-}
-
-// Функция для установки профиля в v2Raytun
 const installProfile = () => {
-    // Проверяем наличие Telegram ID
-    if (!userId.value) {
-        alert('Ошибка: Telegram ID не найден. Пожалуйста, откройте приложение через Telegram бот.')
-        return
-    }
-    
-    // Формируем URL для получения конфигурации с сервера
-    const configUrl = `https://bot.adronvpn.ru/key/main/${userId.value}`
-    
-    // Определяем платформу для URL
-    const platform = currentPlatform.value || 'unknown'
-    
-    // Используем собственный обработчик для установки профиля
-    const currentHost = window.location.origin
-    const installUrl = `${currentHost}/vpn-app/openapp?key=${encodeURIComponent(configUrl)}&platform=${platform}`
-    
-    console.log('Opening install URL:', installUrl)
-    console.log('Config URL:', configUrl)
-    
-    // Открываем ссылку в новой вкладке
-    window.open(installUrl, '_blank')
+	if (!userId.value) {
+		alert('Ошибка: Telegram ID не найден. Пожалуйста, откройте приложение через Telegram бот.')
+		return
+	}
+
+	const configUrl = `https://bot.adronvpn.ru/key/main/${userId.value}`
+	const platform = currentPlatform.value || 'unknown'
+	
+	// Формируем полный URL для страницы OpenApp
+	const openAppUrl = `${window.location.origin}/vpn-app/#/openapp?key=${encodeURIComponent(configUrl)}&platform=${platform}`
+	
+	const tg = window.Telegram?.WebApp
+	if (tg && tg.openLink) {
+		tg.openLink(openAppUrl)
+	} else {
+		router.push({
+			path: '/openapp',
+			query: {
+				key: configUrl,
+				platform: platform
+			}
+		})
+	}
 }
 
-// Функция для копирования ссылки на подписку
-const copySubscriptionLink = async () => {
-    // Проверяем наличие Telegram ID
-    if (!userId.value) {
-        alert('Ошибка: Telegram ID не найден. Пожалуйста, откройте приложение через Telegram бот.')
-        return
-    }
-    
-    // Формируем URL для получения конфигурации
-    const subscriptionUrl = `https://bot.adronvpn.ru/key/main/${userId.value}`
-    
-    try {
-        await navigator.clipboard.writeText(subscriptionUrl)
-        alert('Ссылка на подписку скопирована! Откройте V2Raytun и вставьте её вручную.')
-    } catch (err) {
-        // Fallback для старых браузеров
-        const textArea = document.createElement('textarea')
-        textArea.value = subscriptionUrl
-        document.body.appendChild(textArea)
-        textArea.select()
-        document.execCommand('copy')
-        document.body.removeChild(textArea)
-        alert('Ссылка на подписку скопирована! Откройте V2Raytun и вставьте её вручную.')
-    }
+const copySubscriptionLink = () => {
+	if (!userId.value) {
+		alert('Ошибка: Telegram ID не найден. Пожалуйста, откройте приложение через Telegram бот.')
+		return
+	}
+
+	const subscriptionUrl = `https://bot.adronvpn.ru/key/main/${userId.value}`
+	copyToClipboard(subscriptionUrl, 'Ссылка на подписку скопирована! Откройте V2Raytun и вставьте её вручную.')
 }
 
 onMounted(() => {
-    detectPlatform()
-    
-    // Инициализируем Telegram WebApp
-    initTelegram()
-    
-    // Показываем кнопку "Назад"
-    showBackButton(() => {
-        window.history.back()
-    })
-    
-    // Логируем Telegram ID для отладки
-    if (userId.value) {
-        console.log('User Telegram ID:', userId.value)
-    }
+	detectPlatform()
+	initTelegram()
+	showBackButton(() => {
+		window.history.back()
+	})
 })
 </script>
 

@@ -3,43 +3,43 @@
         <h3 class="tarifes__title">Помощь</h3>
         <p class="tarifes__subtitle">Тут ответы на все вопросы</p>
         <div class="tarifes__links">
-            <router-link class="router-link" to="/vpn-app/tarifes">
+            <router-link class="router-link" to="/tarifes">
                 <span class="router-link__text">
                     Инструкция по подключению iOS через V2RayTun
                 </span>
                 <CircleArrowSVG />
             </router-link>
-            <router-link class="router-link" to="/vpn-app/tarifes">
+            <router-link class="router-link" to="/tarifes">
                 <span class="router-link__text">
                     Инструкция по подключению iOS через V2RayTun
                 </span>
                 <CircleArrowSVG />
             </router-link>
-            <router-link class="router-link" to="/vpn-app/tarifes">
+            <router-link class="router-link" to="/tarifes">
                 <span class="router-link__text">
                     Инструкция по подключению iOS через V2RayTun
                 </span>
                 <CircleArrowSVG />
             </router-link>
-            <router-link class="router-link" to="/vpn-app/tarifes">
+            <router-link class="router-link" to="/tarifes">
                 <span class="router-link__text">
                     Инструкция по подключению iOS через V2RayTun
                 </span>
                 <CircleArrowSVG />
             </router-link>
-            <router-link class="router-link" to="/vpn-app/tarifes">
+            <router-link class="router-link" to="/tarifes">
                 <span class="router-link__text">
                     Инструкция по подключению iOS через V2RayTun
                 </span>
                 <CircleArrowSVG />
             </router-link>
-            <router-link class="router-link" to="/vpn-app/tarifes">
+            <router-link class="router-link" to="/tarifes">
                 <span class="router-link__text">
                     Инструкция по подключению iOS через V2RayTun
                 </span>
                 <CircleArrowSVG />
             </router-link>
-            <router-link class="router-link" to="/vpn-app/tarifes">
+            <router-link class="router-link" to="/tarifes">
                 <span class="router-link__text">
                     Инструкция по подключению iOS через V2RayTun
                 </span>

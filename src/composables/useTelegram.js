@@ -1,4 +1,4 @@
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 
 export function useTelegram() {
     const tg = window.Telegram?.WebApp
@@ -7,15 +7,12 @@ export function useTelegram() {
 
     const initTelegram = () => {
         if (tg) {
-            // Получаем данные пользователя
             const telegramUser = tg.initDataUnsafe?.user
-            
             if (telegramUser) {
                 user.value = telegramUser
                 userId.value = telegramUser.id
             }
 
-            // Расширяем WebApp на весь экран
             tg.expand()
         }
     }
