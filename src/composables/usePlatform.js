@@ -15,11 +15,15 @@ export function usePlatform() {
         else if (/Macintosh|Mac OS X/.test(userAgent)) {
             currentPlatform.value = 'macos'
         }
+        else if (/Windows|Win64|Win32/.test(userAgent)) {
+            currentPlatform.value = 'windows'
+        }
     }
 
     const isIOS = computed(() => currentPlatform.value === 'ios')
     const isAndroid = computed(() => currentPlatform.value === 'android')
     const isMacOS = computed(() => currentPlatform.value === 'macos')
+    const isWindows = computed(() => currentPlatform.value === 'windows')
     const isApplePlatform = computed(() => isIOS.value || isMacOS.value)
 
     const openAppStore = () => {
@@ -27,13 +31,10 @@ export function usePlatform() {
             window.open('https://apps.apple.com/ru/app/v2raytun/id6476628951', '_blank')
         } else if (isAndroid.value) {
             window.open('https://play.google.com/store/apps/details?id=com.v2raytun.android', '_blank')
+        } else if (isWindows.value) {
+            window.open('https://github.com/hiddify/hiddify-next/releases/download/v2.5.7/Hiddify-Windows-Setup-x64.exe', '_blank')
         } else {
-            const choice = confirm('Выберите магазин приложений:\nOK - App Store (iOS/macOS)\nCancel - Google Play (Android)')
-            if (choice) {
-                window.open('https://apps.apple.com/ru/app/v2raytun/id6476628951', '_blank')
-            } else {
-                window.open('https://play.google.com/store/apps/details?id=com.v2raytun.android', '_blank')
-            }
+            alert('Пожалуйста, скачайте приложение:\n\niOS/macOS: V2RayTun\nAndroid: V2RayTun\nWindows: Hiddify')
         }
     }
 
@@ -43,6 +44,7 @@ export function usePlatform() {
         isIOS,
         isAndroid,
         isMacOS,
+        isWindows,
         isApplePlatform,
         openAppStore
     }

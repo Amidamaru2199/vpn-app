@@ -1,7 +1,9 @@
 <template>
 	<div class="openapp container">
-		<img class="openapp__logo" src="/img/atom.png" alt="v2raytun">
-		<h2 class="openapp__title">Если приложение v2Raytun не открылось</h2>
+		<img class="openapp__logo" src="/img/atom.png" alt="vpn">
+		<h2 class="openapp__title">
+			Если приложение {{ isWindows ? 'Hiddify' : 'V2Raytun' }} не открылось
+		</h2>
 		<p class="openapp__subtitle">Убедитесь, что оно установлено, или скопируйте и вставьте ключ вручную.</p>
 
 		<button @click="openApp" class="openapp__button openapp__button--green">
@@ -13,7 +15,7 @@
 		</button>
 
 		<button @click="openStore" class="openapp__button">
-			Установить v2Raytun
+			Установить {{ isWindows ? 'Hiddify' : 'V2Raytun' }}
 		</button>
 
 		<a href="http://gavnetzobot" target="_blank" class="openapp__link">
@@ -41,7 +43,7 @@ const error = ref('')
 const isLoading = ref(false)
 
 const { initTelegram } = useTelegram()
-const { currentPlatform, isApplePlatform, isAndroid, openAppStore: openStore } = usePlatform()
+const { currentPlatform, isApplePlatform, isAndroid, isWindows, openAppStore: openStore } = usePlatform()
 const { copyToClipboard } = useClipboard()
 
 onMounted(async () => {
@@ -59,7 +61,7 @@ onMounted(async () => {
 		isLoading.value = true
 		
 		const platformLower = platform.toLowerCase()
-		if (!['ios', 'android', 'macos'].includes(platformLower)) {
+		if (!['ios', 'android', 'macos', 'windows'].includes(platformLower)) {
 			error.value = `Неподдерживаемая платформа: ${platform}`
 			isLoading.value = false
 			return
@@ -72,6 +74,8 @@ onMounted(async () => {
 			appURL.value = `v2raytun://import/${key}`
 		} else if (isAndroid.value) {
 			appURL.value = `intent://import/${key}#Intent;scheme=v2raytun;package=com.v2raytun.android;end`
+		} else if (isWindows.value) {
+			appURL.value = `hiddify://import/${key}`
 		}
 
 		isLoading.value = false

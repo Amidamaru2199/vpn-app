@@ -1,6 +1,6 @@
 <template>
     <div class="servers container">
-        <h3 class="servers__title">Сервера 1</h3>
+        <h3 class="servers__title">Сервера</h3>
         <p class="servers__subtitle">Здесь вы можете скопировать ключ сервера и изменить набор стран своей подписки</p>
         <div class="servers__links">
             <button class="servers__link" @click="toggleEditMode">
@@ -37,7 +37,9 @@
                     </div>
                 </template>
                 <template #arrow>
-                    <Checkbox v-if="isEditMode" :modelValue="server.is_main" @click.stop />
+                    <Checkbox v-if="isEditMode" :modelValue="server.is_main" 
+                        @update:modelValue="(value) => handleServerSelect(server.id, value)"
+                        @click.stop />
                     <button class="servers__copy-button" v-else @click.stop="copyToClipboard(server.key, 'Ключ сервера скопирован!')">
                         <KeySVG />
                     </button>
@@ -140,7 +142,7 @@ onMounted(async () => {
     })
     
     // Загружаем серверы для текущего пользователя
-    if (!userId.value) {
+    if (userId.value) {
         await usersStore.fetchServers(userId.value)
     } else {
         alert('Ошибка: Telegram ID не найден')

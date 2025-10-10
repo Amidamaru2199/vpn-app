@@ -3,12 +3,12 @@
 		<h3 class="configurations__title">Настройка VPN на устройстве</h3>
 		<p class="configurations__subtitle">Всего пару шагов и можно пользоваться</p>
 		<div class="configurations__box">
-			<p class="configurations__box-description">1. Скачайте и откройте V2Raytun, а затем вернитесь к текущему
+			<p class="configurations__box-description">1. Скачайте и откройте {{ isWindows ? 'Hiddify' : 'V2Raytun' }}, а затем вернитесь к текущему
 				экрану</p>
 			<button class="configurations__box-button" @click="openStore">Скачать</button>
-			<p class="configurations__box-description">2. Добавьте подписку в V2Raytun</p>
+			<p class="configurations__box-description">2. Добавьте подписку в {{ isWindows ? 'Hiddify' : 'V2Raytun' }}</p>
 			<button class="configurations__box-button" @click="installProfile">Добавить</button>
-			<p class="configurations__box-description">3. И все! Нажмите на кнопку подключения в V2Raytun и забудьте об
+			<p class="configurations__box-description">3. И все! Нажмите на кнопку подключения в {{ isWindows ? 'Hiddify' : 'V2Raytun' }} и забудьте об
 				ограничениях</p>
 		</div>
 		<div class="configurations__box">
@@ -29,7 +29,7 @@ import { useClipboard } from '../composables/useClipboard'
 const router = useRouter()
 
 const { userId, initTelegram, showBackButton } = useTelegram()
-const { currentPlatform, detectPlatform, openAppStore: openStore } = usePlatform()
+const { currentPlatform, detectPlatform, isWindows, openAppStore: openStore } = usePlatform()
 const { copyToClipboard } = useClipboard()
 
 const installProfile = () => {
@@ -65,7 +65,7 @@ const copySubscriptionLink = () => {
 	}
 
 	const subscriptionUrl = `https://bot.adronvpn.ru/key/main/${userId.value}`
-	copyToClipboard(subscriptionUrl, 'Ссылка на подписку скопирована! Откройте V2Raytun и вставьте её вручную.')
+	copyToClipboard(subscriptionUrl, `Ссылка на подписку скопирована! Откройте ${isWindows.value ? 'Hiddify' : 'V2Raytun'} и вставьте её вручную.`)
 }
 
 onMounted(() => {
