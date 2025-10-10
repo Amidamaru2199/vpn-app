@@ -1,6 +1,6 @@
 <template>
     <div class="home__links">
-        <RouterLink text="Установка и настройка VPN" :to="'/configurations'">
+        <RouterLink class="router-link_main" text="Установка и настройка VPN" :to="'/configurations'">
             <template #icon>
                 <AtomSVG />
             </template>
