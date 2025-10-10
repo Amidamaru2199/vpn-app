@@ -47,3 +47,55 @@ export const updateUserMainServer = async (tg_id, main_servers) => {
 		throw e
 	}
 }
+
+export const updateAutoPayments = async (tg_id, is_auto_payments) => {
+	try {
+		const response = await fetch(`${API_URL}/user/autopay`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				tgID: tg_id,
+				is_auto_payments: is_auto_payments
+			})
+		})
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`)
+		}
+
+		// Сервер возвращает текст, а не JSON
+		const text = await response.text()
+		return { success: true, message: text }
+	} catch (e) {
+		console.error('updateAutoPayments error:', e)
+		throw e
+	}
+}
+
+export const updateEmail = async (tg_id, email) => {
+	try {
+		const response = await fetch(`${API_URL}/user/email`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				tgID: tg_id,
+				email: email
+			})
+		})
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`)
+		}
+
+		// Сервер возвращает текст, а не JSON
+		const text = await response.text()
+		return { success: true, message: text }
+	} catch (e) {
+		console.error('updateEmail error:', e)
+		throw e
+	}
+}

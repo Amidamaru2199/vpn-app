@@ -9,9 +9,11 @@
 import ParticleImage from "../components/ParticleImage.vue";
 import HomeLinks from "../components/HomeLinks.vue";
 import { onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { useTelegram } from "../composables/useTelegram";
 
-const { hideBackButton, initTelegram, userId } = useTelegram();
+const router = useRouter();
+const { hideBackButton, initTelegram, userId, enableSettingsButton } = useTelegram();
 
 onMounted(() => {
     // Инициализируем Telegram WebApp
@@ -19,6 +21,11 @@ onMounted(() => {
     
     // Скрываем кнопку "Назад" на главной странице
     hideBackButton();
+    
+    // Показываем кнопку Settings в меню (три точки)
+    enableSettingsButton(() => {
+        router.push('/settings');
+    });
     
     // Получаем ID пользователя для дальнейшего использования
     if (userId.value) {

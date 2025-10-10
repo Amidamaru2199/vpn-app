@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getServers, updateUserMainServer as apiUpdateUserMainServer } from '../api/index.js'
+import { getServers, updateUserMainServer as apiUpdateUserMainServer, updateAutoPayments as apiUpdateAutoPayments, updateEmail } from '../api/index.js'
 
 export const useUsersStore = defineStore('users', () => {
 	const servers = ref(null)
-    const isLoading = ref(false)
-	
+	const autoPayments = ref(false)
+	const email = ref('')
+	const isLoading = ref(false)
+
 	const fetchServers = async (tg_id) => {
 		isLoading.value = true
 
@@ -56,13 +58,47 @@ export const useUsersStore = defineStore('users', () => {
 		}
 	}
 
+	const updateAutoPaymentsSettings = async (tg_id, value) => {
+		isLoading.value = true
+
+		try {
+			await apiUpdateAutoPayments(tg_id, value)
+			autoPayments.value = value
+			return true
+		} catch (err) {
+			console.error('Failed to update auto payments:', err)
+			return false
+		} finally {
+			isLoading.value = false
+		}
+	}
+
+	const updateEmailSettings = async (tg_id, emailValue) => {
+		isLoading.value = true
+
+		try {
+			await updateEmail(tg_id, emailValue)
+			email.value = emailValue
+			return true
+		} catch (err) {
+			console.error('Failed to update email:', err)
+			return false
+		} finally {
+			isLoading.value = false
+		}
+	}
+
 	return {
 		servers,
+		autoPayments,
+		email,
 		isLoading,
 		fetchServers,
 		toggleServerSelection,
 		getSelectedServersCount,
 		getSelectedServerIds,
-		saveSelectedServers
+		saveSelectedServers,
+		updateAutoPaymentsSettings,
+		updateEmailSettings,
 	}
 })

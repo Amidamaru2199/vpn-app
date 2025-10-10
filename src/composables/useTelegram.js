@@ -54,6 +54,21 @@ export function useTelegram() {
         }
     }
 
+    const enableSettingsButton = (callback) => {
+        if (tg && tg.SettingsButton) {
+            tg.SettingsButton.show()
+            if (callback) {
+                tg.SettingsButton.onClick(callback)
+            }
+        }
+    }
+
+    const hideSettingsButton = () => {
+        if (tg && tg.SettingsButton) {
+            tg.SettingsButton.hide()
+        }
+    }
+
     return {
         tg,
         user,
@@ -63,7 +78,9 @@ export function useTelegram() {
         hideBackButton,
         showMainButton,
         hideMainButton,
-        closeTelegram
+        closeTelegram,
+        enableSettingsButton,
+        hideSettingsButton
     }
 }
 
