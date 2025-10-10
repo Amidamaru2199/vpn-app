@@ -156,13 +156,13 @@ onMounted(async () => {
     flex-direction: column;
     min-height: 100vh;
 
-    .servers__link-container {
+    &__link-container {
         display: grid;
         grid-template-columns: 60px 1fr;
         gap: 10px;
     }
 
-    .servers__link {
+    &__link {
         display: inline-flex;
         align-items: center;
         gap: 10px;
