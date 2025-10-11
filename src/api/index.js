@@ -22,6 +22,28 @@ export const getServers = async (tg_id) => {
 	}
 }
 
+export const getUser = async (tg_id) => {
+	try {
+		const response = await fetch(`${API_URL}/user/${tg_id}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`)
+		}
+
+		const data = await response.json()
+
+		return data
+	} catch (e) {
+		console.error('getUser error:', e)
+		throw e
+	}
+}
+
 export const updateUserMainServer = async (tg_id, main_servers) => {
 	try {
 		const response = await fetch(`${API_URL}/user/keys`, {

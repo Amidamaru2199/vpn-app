@@ -53,7 +53,7 @@ const updateEmail = async () => {
     //     return
     // }
 
-    const success = await usersStore.updateEmailSettings(804746752, email.value)
+    const success = await usersStore.updateEmailSettings(1024324171, email.value)
     if (success) {
         alert('Email успешно обновлен')
     } else {

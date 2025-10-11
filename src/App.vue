@@ -1,17 +1,15 @@
 <template>
-	<!--<div v-if="isPreloader" class="preloader"></div>-->
 	<router-view></router-view>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
+import { useUsersStore } from './stores/index.js'
+const usersStore = useUsersStore()
 
-const isPreloader = ref(true);
-
-onMounted(() => {
-	setTimeout(() => {
-		isPreloader.value = false;
-	}, 2000)
+onMounted(async () => {
+	await usersStore.fetchUser(1024324171);
+	console.log(usersStore.user);
 });
 </script>
 

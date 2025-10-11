@@ -1,6 +1,6 @@
 <template>
     <div class="home container">
-        <ParticleImage />
+        <ParticleImage :userSubscription="userSubscription" />
         <HomeLinks />
     </div>
 </template>
@@ -8,29 +8,28 @@
 <script setup>
 import ParticleImage from "../components/ParticleImage.vue";
 import HomeLinks from "../components/HomeLinks.vue";
-import { onMounted } from "vue";
+import { onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useTelegram } from "../composables/useTelegram";
+import { useUsersStore } from "../stores";
+import { useDate } from "../composables/useDate";
 
 const router = useRouter();
 const { hideBackButton, initTelegram, userId, enableSettingsButton } = useTelegram();
+const usersStore = useUsersStore();
+const { formatSubscriptionDate } = useDate();
 
-onMounted(() => {
-    // Инициализируем Telegram WebApp
+const userSubscription = computed(() => {
+    const subscription = usersStore.user?.юзер?.subscription;
+    return subscription ? formatSubscriptionDate(subscription) : '';
+});
+
+onMounted(async () => {
     initTelegram();
-    
-    // Скрываем кнопку "Назад" на главной странице
     hideBackButton();
-    
-    // Показываем кнопку Settings в меню (три точки)
     enableSettingsButton(() => {
         router.push('/settings');
     });
-    
-    // Получаем ID пользователя для дальнейшего использования
-    if (userId.value) {
-        console.log('User ID:', userId.value);
-    }
 });
 </script>
 
@@ -38,7 +37,7 @@ onMounted(() => {
 .home {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    // justify-content: space-between;
     min-height: 100vh;
     background-image: url('/img/maps.png');
 }

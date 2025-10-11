@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getServers, updateUserMainServer as apiUpdateUserMainServer, updateAutoPayments as apiUpdateAutoPayments, updateEmail } from '../api/index.js'
+import { getServers, updateUserMainServer as apiUpdateUserMainServer, updateAutoPayments as apiUpdateAutoPayments, updateEmail, getUser } from '../api/index.js'
 
 export const useUsersStore = defineStore('users', () => {
 	const servers = ref(null)
 	const autoPayments = ref(false)
+	const user = ref(null)
 	const email = ref('')
 	const isLoading = ref(false)
 
@@ -21,6 +22,24 @@ export const useUsersStore = defineStore('users', () => {
 		}
 	}
 
+	const fetchUser = async (tg_id) => {
+		isLoading.value = true
+
+		try {
+			const data = await getUser(tg_id)
+			user.value = data
+			
+			// Обновляем настройки из данных пользователя
+			if (data) {
+				autoPayments.value = data.is_auto_payments || false
+				email.value = data.email || ''
+			}
+		} catch (err) {
+			console.error('Failed to fetch user:', err)
+		} finally {
+			isLoading.value = false
+		}
+	}
 
 	const toggleServerSelection = (serverId, isSelected) => {
 		if (!servers.value?.servers) return
@@ -92,8 +111,10 @@ export const useUsersStore = defineStore('users', () => {
 		servers,
 		autoPayments,
 		email,
+		user,
 		isLoading,
 		fetchServers,
+		fetchUser,
 		toggleServerSelection,
 		getSelectedServersCount,
 		getSelectedServerIds,

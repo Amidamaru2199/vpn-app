@@ -37,7 +37,7 @@ const props = defineProps({
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    min-height: 64px;
+    min-height: 54px;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 6px;
