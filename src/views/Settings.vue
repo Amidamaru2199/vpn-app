@@ -44,7 +44,7 @@ const toggleAutoPayments = async (value) => {
     //     return
     // }
 
-    await usersStore.updateAutoPaymentsSettings(804746752, value)
+    await usersStore.updateAutoPaymentsSettings(1024324171, value)
 }
 
 const updateEmail = async () => {

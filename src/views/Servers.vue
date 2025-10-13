@@ -57,11 +57,11 @@ import Pencel from "../components/icons/Pencel.vue";
 import { useUsersStore } from '../stores/index.js'
 import { useTelegram } from '../composables/useTelegram'
 import { useClipboard } from '../composables/useClipboard'
+import { ref } from 'vue';
 
 const { copyToClipboard } = useClipboard()
 
-const { userId, initTelegram, showBackButton } = useTelegram()
-import { onMounted, ref } from 'vue';
+const { userId} = useTelegram()
 
 const usersStore = useUsersStore()
 const isEditMode = ref(false)
@@ -74,13 +74,10 @@ const getFlagEmoji = (code) => {
   return String.fromCodePoint(...codePoints);
 }
 
-// Переключение режима редактирования
 const toggleEditMode = async () => {
     if (isEditMode.value) {
-        // Выходим из режима редактирования - сохраняем изменения
         const currentSelectedCount = usersStore.getSelectedServersCount()
         
-        // Проверка минимального количества серверов
         if (currentSelectedCount < 1) {
             alert('Должен быть выбран хотя бы 1 сервер.')
             return
@@ -99,55 +96,33 @@ const toggleEditMode = async () => {
             alert('Ошибка при сохранении серверов')
         }
     } else {
-        // Входим в режим редактирования
         isEditMode.value = true
     }
 }
 
-// Обработка клика по всей карточке сервера в режиме редактирования
 const handleServerClick = (serverId) => {
     const server = usersStore.servers?.servers?.find(s => s.id === serverId)
     if (!server) return
     
-    // Переключаем состояние на противоположное
     handleServerSelect(serverId, !server.is_main)
 }
 
-// Обработка выбора сервера в режиме редактирования
 const handleServerSelect = (serverId, value) => {
     const maxServers = usersStore.servers?.max_servers || 6
     const currentSelectedCount = usersStore.getSelectedServersCount()
     
-    // Если пытаемся выбрать больше максимума
     if (value && currentSelectedCount >= maxServers) {
         alert(`Максимальное количество серверов: ${maxServers}. Сначала отключите другой сервер.`)
         return
     }
     
-    // Если пытаемся отключить последний сервер
     if (!value && currentSelectedCount <= 1) {
         alert('Должен быть выбран хотя бы 1 сервер.')
         return
     }
     
-    // Обновляем состояние в store
     usersStore.toggleServerSelection(serverId, value)
 }
-
-onMounted(async () => {
-    initTelegram()
-    
-    showBackButton(() => {
-        window.history.back()
-    })
-    
-    // Загружаем серверы для текущего пользователя
-    if (userId.value) {
-        await usersStore.fetchServers(userId.value)
-    } else {
-        alert('Ошибка: Telegram ID не найден')
-    }
-})
 </script>
 
 <style scoped lang="scss">
@@ -166,7 +141,7 @@ onMounted(async () => {
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        height: 52px;
+        height: 54px;
         width: 100%;
         color: #fff;
         background: transparent;
