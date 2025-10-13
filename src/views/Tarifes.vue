@@ -25,19 +25,22 @@
 import RouterLink from "../components/ui/RouterLink.vue";
 import { onMounted } from 'vue';
 import { useUsersStore } from "../stores";
+import { useTelegram } from "../composables/useTelegram";
+
 const usersStore = useUsersStore();
+const { userId } = useTelegram();
 
 const createPayment = async (tariff_id) => {
-    await usersStore.createPayment(10244324171, tariff_id)
+await usersStore.createPayment(userId, tariff_id)
+    
+        const confirmationUrl = usersStore.payments.confirmation.confirmation_url
 
-    const confirmationUrl = usersStore.payments.confirmation.confirmation_url
-
-    const tg = window.Telegram?.WebApp
-    if (tg && tg.openLink) {
-        tg.openLink(confirmationUrl)
-    } else {
-        window.open(confirmationUrl, '_blank')
-    }
+        const tg = window.Telegram?.WebApp
+        if (tg && tg.openLink) {
+            tg.openLink(confirmationUrl)
+        } else {
+            window.open(confirmationUrl, '_blank')
+        }
 }
 
 onMounted(() => {

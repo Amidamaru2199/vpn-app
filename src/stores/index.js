@@ -1,8 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getServers, updateUserMainServer, updateAutoPayments, updateEmail, getUser, getAllTariffs, paymentsCreate } from '../api/index.js'
+import { useToast } from '../composables/useToast'
 
 export const useUsersStore = defineStore('users', () => {
+	const { success, error, info } = useToast()
+	
 	const servers = ref(null)
 	const allTariffs = ref(null)
 	const user = ref(null)
@@ -16,6 +19,7 @@ export const useUsersStore = defineStore('users', () => {
 			const data = await getServers(tg_id)
 			servers.value = data.сервера
 		} catch (err) {
+			error(`Ошибка при загрузке серверов: ${err}`)
 			console.error('Failed to fetch servers:', err)
 		}
 	}
@@ -25,7 +29,8 @@ export const useUsersStore = defineStore('users', () => {
 			const data = await getAllTariffs()
 			allTariffs.value = data.тарифы
 		} catch (err) {
-			console.error('Failed to fetch user stats:', err)
+			error(`Ошибка при загрузке тарифов: ${err}`)
+			console.error('Failed to fetch tariffs:', err)
 		}
 	}
 
@@ -39,6 +44,7 @@ export const useUsersStore = defineStore('users', () => {
 				email.value = data.юзер.email || ''
 			}
 		} catch (err) {
+			error(`Ошибка при загрузке данных пользователя`)
 			console.error('Failed to fetch user:', err)
 		}
 	}
@@ -69,10 +75,11 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			const data = await paymentsCreate(tg_id, tariff_id)
 			payments.value = data.payment_info
-
 			return data
 		} catch (err) {
+			error(`Ошибка при создании платежа: ${err}`)
 			console.error('Failed to create payment:', err)
+			return { success: false, error: err.message }
 		}
 	}
 
@@ -81,8 +88,12 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			await updateEmail(tg_id, emailValue)
 			email.value = emailValue
+			success('Email успешно обновлен')
+			return true
 		} catch (err) {
+			error(`Ошибка при обновлении email: ${err}`)
 			console.error('Failed to update email:', err)
+			return false
 		}
 	}
 
@@ -90,8 +101,12 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			await updateAutoPayments(tg_id, value)
 			autoPayments.value = value
+			success(`Автоплатежи ${value ? 'включены' : 'выключены'}`)
+			return true
 		} catch (err) {
+			error(`Ошибка при обновлении настроек: ${err}`)
 			console.error('Failed to update auto payments:', err)
+			return false
 		}
 	}
 
@@ -99,8 +114,12 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			const main_servers = getSelectedServerIds()
 			await updateUserMainServer(tg_id, main_servers)
+			success('Серверы успешно обновлены')
+			return true
 		} catch (err) {
+			error(`Ошибка при обновлении серверов: ${err}`)
 			console.error('Failed to update servers:', err)
+			return false
 		}
 	}
 

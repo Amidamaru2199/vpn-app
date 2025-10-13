@@ -1,0 +1,161 @@
+<template>
+    <Transition name="toast">
+        <div v-if="visible" class="toast" :class="`toast--${type}`">
+            <div class="toast__content">
+                <span class="toast__icon">{{ icon }}</span>
+                <span class="toast__message">{{ message }}</span>
+            </div>
+            <button class="toast__close" @click="hide">×</button>
+        </div>
+    </Transition>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+
+const props = defineProps({
+    message: {
+        type: String,
+        default: ''
+    },
+    type: {
+        type: String,
+        default: 'info', // 'success', 'error', 'warning', 'info'
+        validator: (value) => ['success', 'error', 'warning', 'info'].includes(value)
+    },
+    duration: {
+        type: Number,
+        default: 3000
+    }
+})
+
+const visible = ref(false)
+let timer = null
+
+const icon = computed(() => {
+    const icons = {
+        success: '✓',
+        error: '✕',
+        warning: '⚠',
+        info: 'ℹ'
+    }
+    return icons[props.type] || icons.info
+})
+
+const show = () => {
+    visible.value = true
+    
+    if (props.duration > 0) {
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+            hide()
+        }, props.duration)
+    }
+}
+
+const hide = () => {
+    visible.value = false
+    clearTimeout(timer)
+}
+
+defineExpose({
+    show,
+    hide
+})
+</script>
+
+<style scoped lang="scss">
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 280px;
+    max-width: 400px;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    backdrop-filter: blur(10px);
+
+    &__content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+    }
+
+    &__icon {
+        font-size: 20px;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    &__message {
+        font-size: 14px;
+        line-height: 1.4;
+        word-break: break-word;
+    }
+
+    &__close {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 24px;
+        line-height: 1;
+        cursor: pointer;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+        flex-shrink: 0;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    &--success {
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.95) 0%, rgba(56, 142, 60, 0.95) 100%);
+        color: #fff;
+    }
+
+    &--error {
+        background: linear-gradient(135deg, rgba(244, 67, 54, 0.95) 0%, rgba(211, 47, 47, 0.95) 100%);
+        color: #fff;
+    }
+
+    &--warning {
+        background: linear-gradient(135deg, rgba(255, 152, 0, 0.95) 0%, rgba(245, 124, 0, 0.95) 100%);
+        color: #fff;
+    }
+
+    &--info {
+        background: linear-gradient(135deg, rgba(33, 150, 243, 0.95) 0%, rgba(25, 118, 210, 0.95) 100%);
+        color: #fff;
+    }
+}
+
+.toast-enter-active,
+.toast-leave-active {
+    transition: all 0.3s ease;
+}
+
+.toast-enter-from {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.toast-leave-to {
+    opacity: 0;
+    transform: translateX(100%);
+}
+</style>
+

@@ -25,16 +25,18 @@ import { useRouter } from 'vue-router'
 import { useTelegram } from '../composables/useTelegram'
 import { usePlatform } from '../composables/usePlatform'
 import { useClipboard } from '../composables/useClipboard'
+import { useToast } from '../composables/useToast'
 
 const router = useRouter()
 
 const { userId, initTelegram, showBackButton } = useTelegram()
 const { currentPlatform, detectPlatform, isWindows, openAppStore: openStore } = usePlatform()
 const { copyToClipboard } = useClipboard()
+const { error: showError } = useToast()
 
 const installProfile = () => {
 	if (!userId.value) {
-		alert('Ошибка: Telegram ID не найден. Пожалуйста, откройте приложение через Telegram бот.')
+		showError('Ошибка: Telegram ID не найден. Пожалуйста, откройте приложение через Telegram бот.')
 		return
 	}
 
@@ -60,7 +62,7 @@ const installProfile = () => {
 
 const copySubscriptionLink = () => {
 	if (!userId.value) {
-		alert('Ошибка: Telegram ID не найден. Пожалуйста, откройте приложение через Telegram бот.')
+		showError('Ошибка: Telegram ID не найден. Пожалуйста, откройте приложение через Telegram бот.')
 		return
 	}
 

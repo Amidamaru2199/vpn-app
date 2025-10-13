@@ -31,34 +31,32 @@ import { useRouter } from 'vue-router'
 import { useTelegram } from '../composables/useTelegram'
 import { usePlatform } from '../composables/usePlatform'
 import { useUsersStore } from '../stores/index.js'
+import { useToast } from '../composables/useToast'
 import Switch from '../components/ui/Switch.vue'
 
 const router = useRouter()
 const usersStore = useUsersStore()
 const { userId, initTelegram, showBackButton } = useTelegram()
 const { detectPlatform } = usePlatform()
+const { error: showError } = useToast()
 const email = ref('')
-const toggleAutoPayments = async (value) => {
-    // if (!userId.value) {
-    //     alert('Ошибка: Telegram ID не найден')
-    //     return
-    // }
 
-    await usersStore.updateAutoPaymentsSettings(1024324171, value)
+const toggleAutoPayments = async (value) => {
+    if (!userId.value) {
+        showError('Ошибка: Telegram ID не найден')
+        return
+    }
+
+    await usersStore.updateAutoPaymentsSettings(userId.value, value)
 }
 
 const updateEmail = async () => {
-    // if (!userId.value) {
-    //     alert('Ошибка: Telegram ID не найден')
-    //     return
-    // }
-
-    const success = await usersStore.updateEmailSettings(1024324171, email.value)
-    if (success) {
-        alert('Email успешно обновлен')
-    } else {
-        alert('Ошибка при обновлении email')
+    if (!userId.value) {
+        showError('Ошибка: Telegram ID не найден')
+        return
     }
+
+    await usersStore.updateEmailSettings(userId.value, email.value)
 }
 
 onMounted(() => {

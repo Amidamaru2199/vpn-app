@@ -57,12 +57,16 @@ import Pencel from "../components/icons/Pencel.vue";
 import { useUsersStore } from '../stores/index.js'
 import { useTelegram } from '../composables/useTelegram'
 import { useClipboard } from '../composables/useClipboard'
-import { ref } from 'vue';
+import { useToast } from '../composables/useToast'
+import { usePlatform } from '../composables/usePlatform'
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+const { userId, initTelegram, showBackButton } = useTelegram()
 const { copyToClipboard } = useClipboard()
-
-const { userId} = useTelegram()
-
+const { error: showError } = useToast()
+const { detectPlatform } = usePlatform()
 const usersStore = useUsersStore()
 const isEditMode = ref(false)
 
@@ -79,21 +83,18 @@ const toggleEditMode = async () => {
         const currentSelectedCount = usersStore.getSelectedServersCount()
         
         if (currentSelectedCount < 1) {
-            alert('Должен быть выбран хотя бы 1 сервер.')
+            showError('Должен быть выбран хотя бы 1 сервер')
             return
         }
         
         if (!userId.value) {
-            alert('Ошибка: Telegram ID не найден')
+            showError('Ошибка: Telegram ID не найден')
             return
         }
         
         const success = await usersStore.saveSelectedServers(userId.value)
         if (success) {
-            alert('Серверы успешно обновлены!')
             isEditMode.value = false
-        } else {
-            alert('Ошибка при сохранении серверов')
         }
     } else {
         isEditMode.value = true
@@ -112,17 +113,26 @@ const handleServerSelect = (serverId, value) => {
     const currentSelectedCount = usersStore.getSelectedServersCount()
     
     if (value && currentSelectedCount >= maxServers) {
-        alert(`Максимальное количество серверов: ${maxServers}. Сначала отключите другой сервер.`)
+        showError(`Максимальное количество серверов: ${maxServers}. Сначала отключите другой сервер.`)
         return
     }
     
     if (!value && currentSelectedCount <= 1) {
-        alert('Должен быть выбран хотя бы 1 сервер.')
+        showError('Должен быть выбран хотя бы 1 сервер')
         return
     }
     
     usersStore.toggleServerSelection(serverId, value)
 }
+
+onMounted(() => {
+    detectPlatform()
+    initTelegram()
+
+    showBackButton(() => {
+        router.back()
+    })
+})
 </script>
 
 <style scoped lang="scss">
