@@ -1,6 +1,6 @@
 <template>
     <div class="home container">
-        <ParticleImage />
+        <ParticleImage :userSubscription="userSubscription" />
         <HomeLinks />
     </div>
 </template>
@@ -8,14 +8,28 @@
 <script setup>
 import ParticleImage from "../components/ParticleImage.vue";
 import HomeLinks from "../components/HomeLinks.vue";
-import { onMounted } from "vue";
+import { onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
+import { useTelegram } from "../composables/useTelegram";
+import { useUsersStore } from "../stores";
+import { useDate } from "../composables/useDate";
 
-onMounted(() => {
-    const tg = window.Telegram?.WebApp;
+const router = useRouter();
+const { hideBackButton, initTelegram, enableSettingsButton } = useTelegram();
+const usersStore = useUsersStore();
+const { formatSubscriptionDate } = useDate();
 
-    if (tg) {
-        tg.BackButton.hide();
-    }
+const userSubscription = computed(() => {
+    const subscription = usersStore.user?.subscription;
+    return subscription ? formatSubscriptionDate(subscription) : '';
+});
+
+onMounted(async () => {
+    initTelegram();
+    hideBackButton();
+    enableSettingsButton(() => {
+        router.push('/settings');
+    });
 });
 </script>
 
@@ -23,7 +37,7 @@ onMounted(() => {
 .home {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    // justify-content: space-between;
     min-height: 100vh;
     background-image: url('/img/maps.png');
 }

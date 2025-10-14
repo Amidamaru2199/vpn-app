@@ -1,22 +1,24 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Configurations from '../views/Configurations.vue'
 import Tarifes from '../views/Tarifes.vue'
 import Servers from '../views/Servers.vue'
 import Help from '../views/Help.vue'
 import OpenApp from '../views/OpenApp.vue'
+import Settings from '../views/Settings.vue'
 
 const routes = [
-  { path: '/vpn-app/', component: Home },
-  { path: '/vpn-app/configurations', component: Configurations },
-  { path: '/vpn-app/tarifes', component: Tarifes },
-  { path: '/vpn-app/servers', component: Servers },
-  { path: '/vpn-app/help', component: Help },
-  { path: '/vpn-app/openapp', component: OpenApp },
+  { path: '/', component: Home },
+  { path: '/configurations', component: Configurations },
+  { path: '/tarifes', component: Tarifes },
+  { path: '/servers', component: Servers },
+  { path: '/help', component: Help },
+  { path: '/openapp', component: OpenApp },
+  { path: '/settings', component: Settings },
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory('/vpn-app/'),
   routes,
 })
 

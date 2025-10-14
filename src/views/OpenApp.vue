@@ -1,19 +1,21 @@
 <template>
 	<div class="openapp container">
-		<img class="openapp__logo" src="/img/atom.png" alt="v2raytun">
-		<h2 class="openapp__title">Если приложение v2Raytun не открылось</h2>
+		<img class="openapp__logo" src="/img/atom.png" alt="vpn">
+		<h2 class="openapp__title">
+			Если приложение {{ isWindows ? 'Hiddify' : 'V2Raytun' }} не открылось
+		</h2>
 		<p class="openapp__subtitle">Убедитесь, что оно установлено, или скопируйте и вставьте ключ вручную.</p>
 
-		<button @click="openApp" class="openapp__button">
+		<button @click="openApp" class="openapp__button openapp__button--green">
 			Попробовать снова
 		</button>
 
-		<button @click="copyConfig" class="openapp__button">
+		<button @click="copyConfig" class="openapp__button openapp__button--blue">
 			Скопировать ключ
 		</button>
 
-		<button @click="openAppStore" class="openapp__button">
-			Установить v2Raytun
+		<button @click="openStore" class="openapp__button">
+			Установить {{ isWindows ? 'Hiddify' : 'V2Raytun' }}
 		</button>
 
 		<a href="http://gavnetzobot" target="_blank" class="openapp__link">
@@ -28,113 +30,76 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useTelegram } from '../composables/useTelegram'
+import { usePlatform } from '../composables/usePlatform'
+import { useClipboard } from '../composables/useClipboard'
 
 const route = useRoute()
 const config = ref('')
 const appURL = ref('')
 const error = ref('')
-const currentPlatform = ref('')
+const isLoading = ref(false)
 
-const detectPlatform = () => {
-	const userAgent = navigator.userAgent || navigator.vendor || window.opera
+const { initTelegram } = useTelegram()
+const { currentPlatform, isApplePlatform, isAndroid, isWindows, openAppStore: openStore } = usePlatform()
+const { copyToClipboard } = useClipboard()
 
-	if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-		currentPlatform.value = 'ios'
-	}
+onMounted(async () => {
+	initTelegram()
 
-	else if (/android/i.test(userAgent)) {
-		currentPlatform.value = 'android'
-	}
-
-	else if (/Macintosh|Mac OS X/.test(userAgent)) {
-		currentPlatform.value = 'macos'
-	}
-}
-
-const isIOS = computed(() => currentPlatform.value === 'ios')
-const isAndroid = computed(() => currentPlatform.value === 'android')
-const isMacOS = computed(() => currentPlatform.value === 'macos')
-const isApplePlatform = computed(() => isIOS.value || isMacOS.value)
-
-onMounted(() => {
-	detectPlatform()
 	const key = route.query.key
 	const platform = route.query.platform
 
 	if (!key || !platform) {
-		error.value = 'Missing required parameters: key and platform'
+		error.value = 'Отсутствуют обязательные параметры: ключ и платформа.'
 		return
 	}
 
 	try {
-		config.value = decodeURIComponent(key)
-		const platformFromQuery = platform.toLowerCase()
-
-		if (['ios', 'android', 'macos'].includes(platformFromQuery)) {
-			currentPlatform.value = platformFromQuery
-		}
-
-		if (isApplePlatform.value) {
-			appURL.value = `v2raytun://import/${encodeURIComponent(config.value)}`
-		} else if (isAndroid.value) {
-			appURL.value = `intent://import/${encodeURIComponent(config.value)}#Intent;scheme=v2raytun;package=com.v2raytun.android;end`
-		} else {
-			error.value = `Unsupported platform: ${platform}`
+		isLoading.value = true
+		
+		const platformLower = platform.toLowerCase()
+		if (!['ios', 'android', 'macos', 'windows'].includes(platformLower)) {
+			error.value = `Неподдерживаемая платформа: ${platform}`
+			isLoading.value = false
 			return
 		}
+		currentPlatform.value = platformLower
+
+		config.value = key
+
+		if (isApplePlatform.value) {
+			appURL.value = `v2raytun://import/${key}`
+		} else if (isAndroid.value) {
+			appURL.value = `intent://import/${key}#Intent;scheme=v2raytun;package=com.v2raytun.android;end`
+		} else if (isWindows.value) {
+			appURL.value = `hiddify://import/${key}`
+		}
+
+		isLoading.value = false
 
 		setTimeout(() => {
 			if (appURL.value && !error.value) {
 				window.location.href = appURL.value
 			}
-		}, 100)
+		}, 500)
 
 	} catch (err) {
 		error.value = 'Error processing configuration: ' + err.message
+		isLoading.value = false
+		console.error('Error:', err)
 	}
 })
 
 const openApp = () => {
 	if (!appURL.value || error.value) return
-
-	try {
-		window.location.href = appURL.value
-
-	} catch (err) {
-		console.error('Error opening app:', err)
-	}
+	window.location.href = appURL.value
 }
 
-const openAppStore = () => {
-	if (isApplePlatform.value) {
-		window.open('https://apps.apple.com/ru/app/v2raytun/id6476628951', '_blank')
-	} else if (isAndroid.value) {
-		window.open('https://play.google.com/store/apps/details?id=com.v2raytun.android', '_blank')
-	} else {
-		const choice = confirm('Выберите магазин приложений:\nOK - App Store (iOS/macOS)\nCancel - Google Play (Android)')
-		if (choice) {
-			window.open('https://apps.apple.com/ru/app/v2raytun/id6476628951', '_blank')
-		} else {
-			window.open('https://play.google.com/store/apps/details?id=com.v2raytun.android', '_blank')
-		}
-	}
-}
-
-const copyConfig = async () => {
-	try {
-		await navigator.clipboard.writeText(config.value)
-		alert('Ссылка скопирована. Откройте ее в приложении вручную.')
-	} catch (err) {
-		const textArea = document.createElement('textarea')
-		textArea.value = config.value
-		document.body.appendChild(textArea)
-		textArea.select()
-		document.execCommand('copy')
-		document.body.removeChild(textArea)
-		alert('Ссылка скопирована. Откройте ее в приложении вручную.')
-	}
+const copyConfig = () => {
+	copyToClipboard(config.value, 'Ссылка скопирована. Откройте ее в приложении вручную.')
 }
 </script>
 
@@ -181,9 +146,31 @@ const copyConfig = async () => {
 		min-width: 210px;
 		background: linear-gradient(135deg, #ff416c 0%, #6a82fb 100%);
 		box-shadow: 0 4px 15px rgba(106, 130, 251, 0.3);
+		text-decoration: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
 		&:hover {
 			box-shadow: 0 0px 30px rgba(106, 130, 251, 0.5);
+		}
+
+		&--green {
+			background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+			box-shadow: 0 4px 15px rgba(56, 239, 125, 0.3);
+
+			&:hover {
+				box-shadow: 0 0px 30px rgba(56, 239, 125, 0.5);
+			}
+		}
+
+		&--blue {
+			background: linear-gradient(135deg, #281199 0%, #3853ef 100%);
+			box-shadow: 0 4px 15px rgba(69, 5, 206, 0.3);
+
+			&:hover {
+				box-shadow: 0 0px 30px rgba(69, 5, 206, 0.5);
+			}
 		}
 	}
 

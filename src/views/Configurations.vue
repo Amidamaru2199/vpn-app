@@ -1,101 +1,81 @@
 <template>
 	<div class="configurations container">
-		<h3 class="configurations__title">Быстрая настройка</h3>
-		<p class="configurations__subtitle">Процесс первичной настройки</p>
+		<h3 class="configurations__title">Настройка VPN на устройстве</h3>
+		<p class="configurations__subtitle">Всего пару шагов и можно пользоваться</p>
 		<div class="configurations__box">
-			<p class="configurations__box-description">1. Скачайте и откройте v2Raytun, а затем вернитесь к текущему экрану</p>
-			<button class="configurations__box-button" @click="openAppStore">Скачать</button>
-			<p class="configurations__box-description">2. Установите профиль</p>
-			<button class="configurations__box-button" @click="installProfile">Установить</button>
-			<p class="configurations__box-description">3. Готово! Подключитесь к VPN и пользуйтесь интернетом без ограничений</p>
-			<p class="configurations__box-recomendations">Дополнительно рекомендуем добавить роутинг, что бы при подключении к российским сайтам не использовался VPN. Telegram и WhatsApp будут работать быстрее.</p>
+			<p class="configurations__box-description">1. Скачайте и откройте {{ isWindows ? 'Hiddify' : 'V2Raytun' }}, а затем вернитесь к текущему
+				экрану</p>
+			<button class="configurations__box-button" @click="openStore">Скачать</button>
+			<p class="configurations__box-description">2. Добавьте подписку в {{ isWindows ? 'Hiddify' : 'V2Raytun' }}</p>
+			<button class="configurations__box-button" @click="installProfile">Добавить</button>
+			<p class="configurations__box-description">3. И все! Нажмите на кнопку подключения в {{ isWindows ? 'Hiddify' : 'V2Raytun' }} и забудьте об
+				ограничениях</p>
 		</div>
 		<div class="configurations__box">
-			<h3 class="configurations__title">Установить ключ в ручную</h3>
-			<button class="configurations__box-button">Получить ключ</button>
+			<h3 class="configurations__title">Добавить подписку вручную</h3>
+			<button class="configurations__box-button" @click="copySubscriptionLink">Скопировать ссылку на
+				подписку</button>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useTelegram } from '../composables/useTelegram'
+import { usePlatform } from '../composables/usePlatform'
+import { useClipboard } from '../composables/useClipboard'
+import { useToast } from '../composables/useToast'
 
-// Определение платформы устройства
-const isIOS = ref(false)
-const isAndroid = ref(false)
-const isMacOS = ref(false)
+const router = useRouter()
 
-// Функция для определения платформы
-const detectPlatform = () => {
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera
-    
-    // Проверяем iOS
-    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        isIOS.value = true
-    }
-    // Проверяем Android
-    else if (/android/i.test(userAgent)) {
-        isAndroid.value = true
-    }
-    // Проверяем macOS
-    else if (/Macintosh|Mac OS X/.test(userAgent)) {
-        isMacOS.value = true
-    }
-}
+const { userId, initTelegram, showBackButton } = useTelegram()
+const { currentPlatform, detectPlatform, isWindows, openAppStore: openStore } = usePlatform()
+const { copyToClipboard } = useClipboard()
+const { error: showError } = useToast()
 
-// Функция для открытия магазина приложений
-const openAppStore = () => {
-    if (isIOS.value || isMacOS.value) {
-        // App Store для iOS
-        window.open('https://apps.apple.com/ru/app/v2raytun/id6476628951', '_blank')
-    } else if (isAndroid.value) {
-        // Google Play для Android
-        window.open('https://play.google.com/store/apps/details?id=com.v2raytun.android', '_blank')
-    } else {
-        // Fallback - показываем оба варианта для других платформ
-        const choice = confirm('Выберите магазин приложений:\nOK - App Store (iOS/macOS)\nCancel - Google Play (Android)')
-        if (choice) {
-            window.open('https://apps.apple.com/ru/app/v2raytun/id6476628951', '_blank')
-        } else {
-            window.open('https://play.google.com/store/apps/details?id=com.v2raytun.android', '_blank')
-        }
-    }
-}
-
-// Функция для установки профиля в v2Raytun
 const installProfile = () => {
-    // Конфигурация vless (замените на вашу реальную конфигурацию)
-    const vlessConfig = "vless://1f0e62c3-28b0-4335-a16f-001ce02191f5@46.226.166.23:443?type=tcp&security=reality&pbk=-rHxsEO8D1KjRPctrcSG0IaJbTfU3wqsOgi4i3q6TSo&fp=chrome&sni=www.github.com&sid=b8f6&spx=%2F&flow=xtls-rprx-vision#AdronVPN:FR"
-    
-    // Определяем платформу для URL
-    let platform = 'unknown'
-    if (isIOS.value) {
-        platform = 'ios'
-    } else if (isAndroid.value) {
-        platform = 'android'
-    } else if (isMacOS.value) {
-        platform = 'macos'
-    }
-    
-    // Используем собственный обработчик для установки профиля
-    const currentHost = window.location.origin
-    const installUrl = `${currentHost}/vpn-app/openapp?key=${encodeURIComponent(vlessConfig)}&platform=${platform}`
-    
-    // Открываем ссылку в новой вкладке
-    window.open(installUrl, '_blank')
+	if (!userId.value) {
+		showError('Ошибка: Telegram ID не найден. Пожалуйста, откройте приложение через Telegram бот.')
+		return
+	}
+
+	const configUrl = `https://bot.adronvpn.ru/key/main/${userId.value}`
+	const platform = currentPlatform.value || 'unknown'
+	
+	// Формируем полный URL для страницы OpenApp
+	const openAppUrl = `${window.location.origin}/vpn-app/#/openapp?key=${encodeURIComponent(configUrl)}&platform=${platform}`
+	
+	const tg = window.Telegram?.WebApp
+	if (tg && tg.openLink) {
+		tg.openLink(openAppUrl)
+	} else {
+		router.push({
+			path: '/openapp',
+			query: {
+				key: configUrl,
+				platform: platform
+			}
+		})
+	}
+}
+
+const copySubscriptionLink = () => {
+	if (!userId.value) {
+		showError('Ошибка: Telegram ID не найден. Пожалуйста, откройте приложение через Telegram бот.')
+		return
+	}
+
+	const subscriptionUrl = `https://bot.adronvpn.ru/key/main/${userId.value}`
+	copyToClipboard(subscriptionUrl, `Ссылка на подписку скопирована! Откройте ${isWindows.value ? 'Hiddify' : 'V2Raytun'} и вставьте её вручную.`)
 }
 
 onMounted(() => {
-    detectPlatform()
-    
-    // Telegram WebApp инициализация
-    const tg = window.Telegram?.WebApp
-    if (tg) {
-        tg.BackButton.show()
-        tg.BackButton.onClick(() => {
-            window.history.back()
-        })
-    }
+	detectPlatform()
+	initTelegram()
+	showBackButton(() => {
+		window.history.back()
+	})
 })
 </script>
 
@@ -149,16 +129,6 @@ onMounted(() => {
 			background-color: rgba(233, 66, 69, 0.8);
 			color: rgba(255, 255, 255, 0.8);
 		}
-	}
-
-	&__box-recomendations {
-		font-size: 12px;
-		line-height: 150%;
-		color: #D0CBC3;
-		border: 1px solid #D0CBC3;
-		border-radius: 4px;
-		margin-top: 10px;
-		padding: 5px;
 	}
 }
 </style>

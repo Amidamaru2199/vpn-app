@@ -1,26 +1,26 @@
 <template>
     <div class="home__links">
-        <RouterLink text="Установка и настройка VPN" :to="'/vpn-app/configurations'">
+        <RouterLink class="router-link_main" text="Установка и настройка VPN" :to="'/configurations'">
             <template #icon>
                 <AtomSVG />
             </template>
         </RouterLink>
-        <RouterLink text="Видеоинструкция по установке" :to="'/vpn-app/about'">
+        <RouterLink text="Видеоинструкция по установке" :to="'/about'">
             <template #icon>
                 <InstructionSVG />
             </template>
         </RouterLink>
-        <RouterLink text="Продлить подписку (тарифы)" :to="'/vpn-app/tarifes'">
+        <RouterLink text="Продлить подписку (тарифы)" :to="'/tarifes'">
             <template #icon>
                 <TarifesSVG />
             </template>
         </RouterLink>
-        <RouterLink text="Сменить страну (сервера)" :to="'/vpn-app/servers'">
+        <RouterLink text="Сменить страну (сервера)" :to="'/servers'">
             <template #icon>
                 <EartSVG />
             </template>
         </RouterLink>
-        <RouterLink text="Ответы на вопросы" :to="'/vpn-app/help'">
+        <RouterLink text="Ответы на вопросы" :to="'/help'">
             <template #icon>
                 <VoprosSVG />
             </template>

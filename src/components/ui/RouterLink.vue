@@ -1,11 +1,12 @@
 <template>
-    <router-link class="router-link" :to="to">
+    <component :is="component" class="router-link" :to="to">
         <slot name="icon" />
-        <span>{{ text }}</span>
+        <span v-if="text">{{ text }}</span>
+        <slot v-else name="text" />
         <slot name="arrow">
             <CircleArrowSVG />
         </slot>
-    </router-link>
+    </component>
 </template>
 
 <script setup>
@@ -15,11 +16,16 @@ import CircleArrowSVG from '../icons/CircleArrowSVG.vue';
 const props = defineProps({
     to: {
         type: String,
-        required: true
+        required: false
     },
     text: {
         type: String,
-        required: true
+        required: false
+    },
+    component: {
+        type: String,
+        required: false,
+        default: 'router-link'
     }
 });
 </script>
@@ -31,7 +37,7 @@ const props = defineProps({
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    min-height: 64px;
+    min-height: 54px;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 6px;
@@ -40,17 +46,24 @@ const props = defineProps({
     padding-inline: 10px;
     overflow: hidden;
     transition: 0.3s;
+    cursor: pointer;
+
+    &_active {
+        border: 1px solid #DBD6CE;
+        background: linear-gradient(to right, #e53935, #f76c6c);
+
+        .router-link__duration,
+        .router-link__price {
+            color: #fff;
+        }
+    }
 
     &:hover {
         border: 1px solid #DBD6CE;
         background-color: rgba(255, 255, 255, 0.3);
     }
 
-    span {
-        margin: 0 auto 0 10px;
-    }
-
-    &:first-of-type {
+    &_main {
         &::before {
             content: '';
             position: absolute;
@@ -65,6 +78,23 @@ const props = defineProps({
             transform: skewX(-20deg);
             animation: shine 3.2s infinite;
         }
+    }
+
+    span {
+        margin: 0 auto 0 10px;
+    }
+
+    &>span {
+        margin: 0 auto 0 10px;
+    }
+
+    img {
+        height: 35px;
+    }
+
+    svg {
+        width: 32px;
+        height: 32px;
     }
 }
 
