@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/vpn-app/#/',
+  base: '/vpn-app/',
   plugins: [vue(), VitePWA({
     registerType: 'prompt',
     injectRegister: false,

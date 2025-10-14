@@ -1,5 +1,52 @@
-# Vue 3 + Vite
+# VPN App - PWA приложение
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Vue.js PWA приложение с возможностью установки как нативное приложение.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## 🚀 Быстрый старт
+
+### Разработка
+```bash
+npm install
+npm run dev
+```
+
+### Сборка для продакшна
+```bash
+npm run build
+```
+
+### Деплой на https://bot.adronvpn.ru/vpn-app/
+```bash
+# Быстрое обновление (рекомендуется)
+./update-and-deploy.sh
+
+# Или только деплой (без пересборки)
+./deploy.sh
+```
+
+## 📁 Файлы для деплоя
+
+- `nginx-vpn-app.conf` - конфигурация nginx (добавить к существующему)
+- `DEPLOY_INSTRUCTIONS.md` - подробная инструкция по развёртыванию
+- `deploy.sh` - скрипт для автоматического деплоя
+- `update-and-deploy.sh` - полный скрипт обновления (сборка + деплой)
+- `UPDATE_GUIDE.md` - руководство по обновлениям
+
+## 🌐 URL после деплоя
+
+**Приложение:** https://bot.adronvpn.ru/vpn-app/  
+**Бот (без изменений):** https://bot.adronvpn.ru/
+
+## 📱 PWA функции
+
+- ✅ Установка как нативное приложение
+- ✅ Работа офлайн (Service Worker)
+- ✅ Push уведомления (готово к настройке)
+- ✅ Иконки для всех устройств
+
+## 🛠 Технологии
+
+- Vue 3 + Composition API
+- Vite для сборки
+- PWA plugin для Service Worker
+- SCSS для стилей
