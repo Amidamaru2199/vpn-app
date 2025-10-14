@@ -44,7 +44,7 @@ const installProfile = () => {
 	const platform = currentPlatform.value || 'unknown'
 	
 	// Формируем полный URL для страницы OpenApp
-	const openAppUrl = `${window.location.origin}/vpn-app/#/openapp?key=${encodeURIComponent(configUrl)}&platform=${platform}`
+	const openAppUrl = `${window.location.origin}/vpn-app/openapp?key=${encodeURIComponent(configUrl)}&platform=${platform}`
 	
 	const tg = window.Telegram?.WebApp
 	if (tg && tg.openLink) {
