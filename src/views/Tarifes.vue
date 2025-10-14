@@ -26,13 +26,21 @@ import RouterLink from "../components/ui/RouterLink.vue";
 import { onMounted } from 'vue';
 import { useUsersStore } from "../stores";
 import { useTelegram } from "../composables/useTelegram";
+import { useToast } from '../composables/useToast'
 
 const usersStore = useUsersStore();
-const { userId } = useTelegram();
+const { userId, initTelegram, showBackButton } = useTelegram();
+const { error: showError } = useToast()
 
 const createPayment = async (tariff_id) => {
-await usersStore.createPayment(userId, tariff_id)
+    if (!userId.value) {
+        showError('Ошибка: Telegram ID не найден')
+        return
+    }
     
+    await usersStore.createPayment(userId.value, tariff_id)
+
+    if (usersStore.payments?.confirmation?.confirmation_url) {
         const confirmationUrl = usersStore.payments.confirmation.confirmation_url
 
         const tg = window.Telegram?.WebApp
@@ -41,16 +49,15 @@ await usersStore.createPayment(userId, tariff_id)
         } else {
             window.open(confirmationUrl, '_blank')
         }
+    }
 }
 
 onMounted(() => {
-    const tg = window.Telegram?.WebApp;
-    if (tg) {
-        tg.BackButton.show();
-        tg.BackButton.onClick(() => {
-            window.history.back();
-        });
-    }
+    initTelegram()
+    
+    showBackButton(() => {
+        window.history.back()
+    })
 });
 </script>
 

@@ -15,12 +15,12 @@ import { useUsersStore } from "../stores";
 import { useDate } from "../composables/useDate";
 
 const router = useRouter();
-const { hideBackButton, initTelegram, userId, enableSettingsButton } = useTelegram();
+const { hideBackButton, initTelegram, enableSettingsButton } = useTelegram();
 const usersStore = useUsersStore();
 const { formatSubscriptionDate } = useDate();
 
 const userSubscription = computed(() => {
-    const subscription = usersStore.user?.юзер?.subscription;
+    const subscription = usersStore.user?.subscription;
     return subscription ? formatSubscriptionDate(subscription) : '';
 });
 

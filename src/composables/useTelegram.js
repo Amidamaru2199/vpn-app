@@ -11,13 +11,9 @@ export function useTelegram() {
             if (telegramUser) {
                 user.value = telegramUser
                 userId.value = telegramUser.id
-            } else {
-                userId.value = 1024324171
             }
 
             tg.expand()
-        } else {
-            userId.value = 1024324171
         }
     }
 
