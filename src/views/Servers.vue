@@ -155,7 +155,7 @@ onMounted(() => {
         width: 100%;
         color: $primary-color;
         background: transparent;
-        border: 1px solid rgba(255, 255, 255, .1);
+        border: 1px solid $background-color;
         border-radius: 6px;
         text-decoration: none;
         padding: 10px;

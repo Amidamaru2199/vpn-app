@@ -90,8 +90,8 @@ onMounted(() => {
     }
 
     &__info {
-        background: $router-link-background-color;
-        border: 1px solid $router-link-background-color;
+        background: $background-color;
+        border: 1px solid $background-color;
         border-radius: 6px;
         padding: 16px;
         margin-bottom: 20px;
@@ -102,7 +102,7 @@ onMounted(() => {
         justify-content: space-between;
         align-items: center;
         padding: 12px 0;
-        border-bottom: 1px solid $router-link-background-color;
+        border-bottom: 1px solid $background-color;
 
         &_column {
             flex-direction: column;
@@ -118,8 +118,8 @@ onMounted(() => {
     &__button {
         width: 100%;
         min-height: 54px;
-        background: #E94245;
-        border: 1px solid $router-link-background-color;
+        background: $background-red-color;
+        border: 1px solid $background-color;
         border-radius: 6px;
         color: $primary-color;
         font-size: 14px;
@@ -128,15 +128,15 @@ onMounted(() => {
         transition: 0.3s;
 
         &:hover {
-            background: #e64b4e;
+            background: $background-red-hover-color;
         }
     }
 
     &__input {
         width: 100%;
         min-height: 54px;
-        background: $router-link-background-color;
-        border: 1px solid $router-link-background-color;
+        background: $background-color;
+        border: 1px solid $background-color;
         border-radius: 6px;
         color: $primary-color;
         padding-inline: 10px;

@@ -40,7 +40,7 @@ const handleChange = (event) => {
         height: 0;
 
         &:checked + .switch__slider {
-            background-color: #E94245;
+            background-color: $background-red-color;
         }
 
         &:checked + .switch__slider:before {
@@ -48,7 +48,7 @@ const handleChange = (event) => {
         }
 
         &:focus + .switch__slider {
-            box-shadow: 0 0 1px #E94245;
+            box-shadow: 0 0 1px $background-red-color;
         }
     }
 

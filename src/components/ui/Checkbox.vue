@@ -84,8 +84,8 @@ const handleChange = (event) => {
         border-color: $checkbox-primary-color;
 
         &:hover:not(.disabled) {
-            background-color: $checkbox-blue-color;
-            border-color: $checkbox-blue-color;
+            background-color: $blue-color;
+            border-color: $blue-color;
         }
     }
 

@@ -140,36 +140,36 @@ const copyConfig = () => {
 		font-size: 16px;
 		font-weight: 500;
 		letter-spacing: 0.01em;
-		color: white;
+		color: $primary-color;
 		cursor: pointer;
 		transition: all 0.3s ease;
 		min-width: 210px;
-		background: linear-gradient(135deg, #ff416c 0%, #6a82fb 100%);
-		box-shadow: 0 4px 15px rgba(106, 130, 251, 0.3);
+		background: $open-app-don-color;
+		box-shadow: 0 4px 15px $open-app-shadow-color;
 		text-decoration: none;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 
 		&:hover {
-			box-shadow: 0 0px 30px rgba(106, 130, 251, 0.5);
+			box-shadow: 0 0px 30px $open-app-shadow-hover-color;
 		}
 
 		&--green {
-			background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-			box-shadow: 0 4px 15px rgba(56, 239, 125, 0.3);
+			background: $open-app-copy-color;
+			box-shadow: 0 4px 15px $open-app-shadow-copy-color;
 
 			&:hover {
-				box-shadow: 0 0px 30px rgba(56, 239, 125, 0.5);
+				box-shadow: 0 0px 30px $open-app-shadow-copy-hover-color;
 			}
 		}
 
 		&--blue {
-			background: linear-gradient(135deg, #281199 0%, #3853ef 100%);
-			box-shadow: 0 4px 15px rgba(69, 5, 206, 0.3);
+			background: $open-app-re-color;
+			box-shadow: 0 4px 15px $open-app-shadow-re-color;
 
 			&:hover {
-				box-shadow: 0 0px 30px rgba(69, 5, 206, 0.5);
+				box-shadow: 0 0px 30px $open-app-shadow-re-hover-color;
 			}
 		}
 	}
@@ -179,7 +179,7 @@ const copyConfig = () => {
 		font-size: 16px;
 		font-weight: 500;
 		letter-spacing: 0.01em;
-		color: white;
+		color: $primary-color;
 
 		&:hover {
 			opacity: 0.8;

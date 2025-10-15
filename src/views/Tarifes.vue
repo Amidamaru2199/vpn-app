@@ -110,7 +110,7 @@ onMounted(() => {
         border-radius: 4px;
         margin-top: auto;
         padding: 5px;
-        background: $router-link-background-color;
+        background: $background-color;
 
         p:first-of-type {
             margin-bottom: 5px;

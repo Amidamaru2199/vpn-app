@@ -96,7 +96,7 @@ onMounted(() => {
 	}
 
 	&__box {
-		background-color: #3F3F3F;
+		background-color: $background-color;
 		border-radius: 6px;
 		padding: 24px 16px;
 		margin-bottom: 24px;
@@ -116,7 +116,7 @@ onMounted(() => {
 		width: 100%;
 		height: 48px;
 		border-radius: 6px;
-		background-color: #E94245;
+		background-color: $background-red-color;
 		border: none;
 		transition: 0.3s;
 		font-size: 16px;
@@ -126,8 +126,7 @@ onMounted(() => {
 		cursor: pointer;
 
 		&:hover {
-			background-color: rgba(233, 66, 69, 0.8);
-			color: rgba(255, 255, 255, 0.8);
+			background-color: $background-red-hover-color;
 		}
 	}
 }

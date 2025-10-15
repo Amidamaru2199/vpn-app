@@ -1,5 +1,7 @@
 <template>
-    <component :is="component" class="router-link" :to="to">
+    <component :is="isExternal ? 'a' : component" class="router-link" :href="isExternal ? to : null"
+        :to="!isExternal ? to : null" :target="isExternal ? '_blank' : null"
+        :rel="isExternal ? 'noopener noreferrer' : null">
         <slot name="icon" />
         <span v-if="text">{{ text }}</span>
         <slot v-else name="text" />
@@ -10,7 +12,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, computed } from 'vue';
 import CircleArrowSVG from '../icons/CircleArrowSVG.vue';
 
 const props = defineProps({
@@ -28,6 +30,8 @@ const props = defineProps({
         default: 'router-link'
     }
 });
+
+const isExternal = computed(() => props.to?.startsWith('http'))
 </script>
 
 <style scoped lang="scss">
@@ -38,8 +42,8 @@ const props = defineProps({
     align-items: center;
     width: 100%;
     min-height: 54px;
-    background: $router-link-background-color;
-    border: 1px solid $router-link-background-color;
+    background: $background-color;
+    border: 1px solid $background-color;
     border-radius: 6px;
     color: $primary-color;
     text-decoration: none;

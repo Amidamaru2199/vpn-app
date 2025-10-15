@@ -1,53 +1,18 @@
 <template>
-    <div class="tarifes container">
-        <h3 class="tarifes__title">Помощь</h3>
-        <p class="tarifes__subtitle">Тут ответы на все вопросы</p>
-        <div class="tarifes__links">
-            <router-link class="router-link" to="/tarifes">
-                <span class="router-link__text">
-                    Инструкция по подключению iOS через V2RayTun
-                </span>
-                <CircleArrowSVG />
-            </router-link>
-            <router-link class="router-link" to="/tarifes">
-                <span class="router-link__text">
-                    Инструкция по подключению iOS через V2RayTun
-                </span>
-                <CircleArrowSVG />
-            </router-link>
-            <router-link class="router-link" to="/tarifes">
-                <span class="router-link__text">
-                    Инструкция по подключению iOS через V2RayTun
-                </span>
-                <CircleArrowSVG />
-            </router-link>
-            <router-link class="router-link" to="/tarifes">
-                <span class="router-link__text">
-                    Инструкция по подключению iOS через V2RayTun
-                </span>
-                <CircleArrowSVG />
-            </router-link>
-            <router-link class="router-link" to="/tarifes">
-                <span class="router-link__text">
-                    Инструкция по подключению iOS через V2RayTun
-                </span>
-                <CircleArrowSVG />
-            </router-link>
-            <router-link class="router-link" to="/tarifes">
-                <span class="router-link__text">
-                    Инструкция по подключению iOS через V2RayTun
-                </span>
-                <CircleArrowSVG />
-            </router-link>
-            <router-link class="router-link" to="/tarifes">
-                <span class="router-link__text">
-                    Инструкция по подключению iOS через V2RayTun
-                </span>
-                <CircleArrowSVG />
-            </router-link>
+    <div class="help container">
+        <h3 class="help__title">Помощь</h3>
+        <p class="help__subtitle">Тут ответы на все вопросы</p>
+        <div class="help__links">
+            <RouterLink :to="'https://telegra.ph/Instrukciya-po-podklyucheniyu-iOS-cherez-V2RayTun-06-25'">
+                <template #text>
+                    <span class="help__router-link-text">
+                        Инструкция по подключению iOS через V2RayTun
+                    </span>
+                </template>
+            </RouterLink>
         </div>
         <p class="help__questions">Не нащли ответ на свой вопрос?</p>
-        <a class="servers__link" href="#">
+        <a class="help__servers-link" href="#">
             <TelegramSVG />
             Тех поддержка
         </a>
@@ -55,33 +20,33 @@
 </template>
 
 <script setup>
+import RouterLink from "../components/ui/RouterLink.vue";
 import TelegramSVG from '../components/icons/TelegramSVG.vue';
-import CircleArrowSVG from "../components/icons/CircleArrowSVG.vue";
 import { onMounted } from 'vue';
 
 onMounted(() => {
     const tg = window.Telegram?.WebApp;
     if (tg) {
-        tg.BackButton.show();  // показать кнопку "назад"
+        tg.BackButton.show();
         tg.BackButton.onClick(() => {
-            window.history.back(); // можно заменить на router.back() если используешь Vue Router
+            window.history.back();
         });
     }
 });
 </script>
 
 <style scoped lang="scss">
-.tarifes {
+.help {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 
-    .help__questions {
+    &__questions {
         color: $primary-color;
         margin: 20px 0 10px;
     }
 
-    .servers__link {
+    &__servers-link {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -89,7 +54,7 @@ onMounted(() => {
         height: 42px;
         width: 100%;
         color: $primary-color;
-        border: 1px solid rgba(255, 255, 255, .1);
+        border: 1px solid $background-color;
         border-radius: 6px;
         text-decoration: none;
         padding: 10px;
@@ -106,56 +71,29 @@ onMounted(() => {
         }
     }
 
-    .tarifes__title {
+    &__title {
         font-size: 24px;
         line-height: 150%;
         margin-bottom: 5px;
         color: $primary-color;
     }
 
-    .tarifes__subtitle {
+    &__subtitle {
         font-size: 14px;
         line-height: 150%;
         margin-bottom: 24px;
         color: $secondary-color;
     }
 
-    .tarifes__links {
+    &__links {
         display: flex;
         flex-direction: column;
         gap: 10px;
     }
 
-    .router-link__text {
+    &__router-link-text {
         display: flex;
         flex-direction: column;
-    }
-
-    .router-link__duration {
-        font-size: 14px;
-        line-height: 150%;
-        color: $secondary-color;
-    }
-
-    .router-link__price {
-        font-size: 12px;
-        line-height: 150%;
-        color: $secondary-color;
-    }
-
-    .tarifes__text {
-        font-size: 12px;
-        line-height: 150%;
-        color: $secondary-color;
-        border: 1px solid $secondary-color;
-        border-radius: 4px;
-        margin-top: auto;
-        padding: 5px;
-        background: $router-link-background-color;
-
-        p:first-of-type {
-            margin-bottom: 5px;
-        }
     }
 }
 </style>
