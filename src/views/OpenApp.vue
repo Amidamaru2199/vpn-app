@@ -121,21 +121,21 @@ const copyConfig = () => {
 	&__title {
 		font-size: 28px;
 		font-weight: 600;
-		color: #fff;
+		color: $primary-color;
 		margin-bottom: 10px;
 	}
 
 	&__subtitle {
 		font-size: 16px;
 		margin-bottom: 30px;
-		color: #fff;
+		color: $primary-color;
 		line-height: 1.5;
 	}
 
 	&__button {
 		min-height: 52px;
 		margin-bottom: 10px;
-		border: 1px solid #fff;
+		border: 1px solid $primary-color;
 		border-radius: 100px;
 		font-size: 16px;
 		font-weight: 500;
@@ -191,7 +191,7 @@ const copyConfig = () => {
 		padding: 15px;
 		background: linear-gradient(#ff416c 0%);
 		border-radius: 8px;
-		color: #fff;
+		color: $primary-color;
 	}
 }
 </style>

@@ -69,14 +69,14 @@ onMounted(() => {
         font-size: 24px;
         line-height: 150%;
         margin-bottom: 5px;
-        color: #fff;
+        color: $primary-color;
     }
 
     &__subtitle {
         font-size: 14px;
         line-height: 150%;
         margin-bottom: 24px;
-        color: #D0CBC3;
+        color: $secondary-color;
     }
 
     &__links {
@@ -93,24 +93,24 @@ onMounted(() => {
     &__router-link-duration {
         font-size: 14px;
         line-height: 150%;
-        color: #D0CBC3;
+        color: $secondary-color;
     }
 
     &__router-link-price {
         font-size: 12px;
         line-height: 150%;
-        color: #D0CBC3;
+        color: $secondary-color;
     }
 
     &__text {
         font-size: 12px;
         line-height: 150%;
-        color: #D0CBC3;
-        border: 1px solid #D0CBC3;
+        color: $secondary-color;
+        border: 1px solid $secondary-color;
         border-radius: 4px;
         margin-top: auto;
         padding: 5px;
-        background: rgba(255, 255, 255, 0.1);
+        background: $router-link-background-color;
 
         p:first-of-type {
             margin-bottom: 5px;

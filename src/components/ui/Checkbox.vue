@@ -68,30 +68,30 @@ const handleChange = (event) => {
     justify-content: center;
     width: 20px;
     height: 20px;
-    border: 2px solid #d1d5db;
+    border: 2px solid $checkbox-border-disabled-color;
     border-radius: 4px;
-    background-color: #ffffff;
+    background-color: $primary-color;
     transition: all 0.2s ease-in-out;
     flex-shrink: 0;
 
     &:hover:not(.disabled) {
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        border-color: $checkbox-primary-color;
+        box-shadow: 0 0 0 3px $shadow-color;
     }
 
     &.checked {
-        background-color: #3b82f6;
-        border-color: #3b82f6;
+        background-color: $checkbox-primary-color;
+        border-color: $checkbox-primary-color;
 
         &:hover:not(.disabled) {
-            background-color: #2563eb;
-            border-color: #2563eb;
+            background-color: $checkbox-blue-color;
+            border-color: $checkbox-blue-color;
         }
     }
 
     &.disabled {
-        background-color: #f3f4f6;
-        border-color: #d1d5db;
+        background-color: $checkbox-background-disabled-color;
+        border-color: $checkbox-border-disabled-color;
         cursor: not-allowed;
     }
 }
@@ -99,7 +99,7 @@ const handleChange = (event) => {
 .checkbox-icon {
     width: 14px;
     height: 14px;
-    color: #ffffff;
+    color: $primary-color;
     transition: all 0.2s ease-in-out;
 }
 
@@ -107,46 +107,10 @@ const handleChange = (event) => {
     margin-left: 8px;
     font-size: 14px;
     line-height: 1.5;
-    color: #374151;
+    color: $secondary-color;
 
     .disabled & {
-        color: #9ca3af;
-    }
-}
-
-// Темная тема
-@media (prefers-color-scheme: dark) {
-    .checkbox-custom {
-        background-color: #1f2937;
-        border-color: #4b5563;
-
-        &:hover:not(.disabled) {
-            border-color: #60a5fa;
-            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
-        }
-
-        &.checked {
-            background-color: #3b82f6;
-            border-color: #3b82f6;
-
-            &:hover:not(.disabled) {
-                background-color: #2563eb;
-                border-color: #2563eb;
-            }
-        }
-
-        &.disabled {
-            background-color: #374151;
-            border-color: #4b5563;
-        }
-    }
-
-    .checkbox-label {
-        color: #d1d5db;
-
-        .disabled & {
-            color: #6b7280;
-        }
+        color: $checkbox-label-disabled-color;
     }
 }
 </style>

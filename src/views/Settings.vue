@@ -79,19 +79,19 @@ onMounted(() => {
         font-size: 24px;
         line-height: 150%;
         margin-bottom: 5px;
-        color: #fff;
+        color: $primary-color;
     }
 
     &__subtitle {
         font-size: 14px;
         line-height: 150%;
         margin-bottom: 24px;
-        color: #D0CBC3;
+        color: $secondary-color;
     }
 
     &__info {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: $router-link-background-color;
+        border: 1px solid $router-link-background-color;
         border-radius: 6px;
         padding: 16px;
         margin-bottom: 20px;
@@ -102,7 +102,7 @@ onMounted(() => {
         justify-content: space-between;
         align-items: center;
         padding: 12px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid $router-link-background-color;
 
         &_column {
             flex-direction: column;
@@ -119,9 +119,9 @@ onMounted(() => {
         width: 100%;
         min-height: 54px;
         background: #E94245;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid $router-link-background-color;
         border-radius: 6px;
-        color: #fff;
+        color: $primary-color;
         font-size: 14px;
         font-weight: 500;
         cursor: pointer;
@@ -135,22 +135,22 @@ onMounted(() => {
     &__input {
         width: 100%;
         min-height: 54px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: $router-link-background-color;
+        border: 1px solid $router-link-background-color;
         border-radius: 6px;
-        color: #fff;
+        color: $primary-color;
         padding-inline: 10px;
         transition: 0.3s;
     }
 
     &__label {
         font-size: 14px;
-        color: #D0CBC3;
+        color: $secondary-color;
     }
 
     &__value {
         font-size: 14px;
-        color: #fff;
+        color: $primary-color;
         font-weight: 500;
     }
 }

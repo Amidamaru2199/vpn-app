@@ -56,7 +56,7 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .preloader {
 	position: fixed;
 	inset: 0;
@@ -78,7 +78,7 @@ onMounted(async () => {
 	min-width: 280px;
 	padding: 16px;
 	border-radius: 8px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 4px 12px $shadow-color;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -104,13 +104,13 @@ onMounted(async () => {
 	font-size: 14px;
 	line-height: 1.4;
 	word-break: break-word;
-	color: #fff;
+	color: $primary-color;
 }
 
 .toast__close {
 	background: none;
 	border: none;
-	color: #fff;
+	color: $primary-color;
 	font-size: 24px;
 	line-height: 1;
 	cursor: pointer;
@@ -130,19 +130,19 @@ onMounted(async () => {
 }
 
 .toast--success {
-	background: linear-gradient(135deg, rgba(76, 175, 80, 0.95) 0%, rgba(56, 142, 60, 0.95) 100%);
+	background: $success-gradient-color;
 }
 
 .toast--error {
-	background: linear-gradient(135deg, rgba(244, 67, 54, 0.95) 0%, rgba(211, 47, 47, 0.95) 100%);
+	background: $error-gradient-color;
 }
 
 .toast--warning {
-	background: linear-gradient(135deg, rgba(255, 152, 0, 0.95) 0%, rgba(245, 124, 0, 0.95) 100%);
+	background: $warning-gradient-color;
 }
 
 .toast--info {
-	background: linear-gradient(135deg, rgba(33, 150, 243, 0.95) 0%, rgba(25, 118, 210, 0.95) 100%);
+	background: $info-gradient-color;
 }
 
 .toast-list-enter-active,

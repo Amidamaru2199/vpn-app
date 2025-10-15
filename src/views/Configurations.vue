@@ -85,14 +85,14 @@ onMounted(() => {
 		font-size: 24px;
 		line-height: 150%;
 		margin-bottom: 5px;
-		color: #fff;
+		color: $primary-color;
 	}
 
 	&__subtitle {
 		font-size: 14px;
 		line-height: 150%;
 		margin-bottom: 24px;
-		color: #D0CBC3;
+		color: $secondary-color;
 	}
 
 	&__box {
@@ -106,7 +106,7 @@ onMounted(() => {
 		font-size: 14px;
 		line-height: 150%;
 		margin-bottom: 5px;
-		color: #fff;
+		color: $primary-color;
 	}
 
 	&__box-button {
@@ -121,7 +121,7 @@ onMounted(() => {
 		transition: 0.3s;
 		font-size: 16px;
 		line-height: 150%;
-		color: #fff;
+		color: $primary-color;
 		margin-bottom: 15px;
 		cursor: pointer;
 

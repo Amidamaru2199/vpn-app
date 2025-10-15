@@ -44,7 +44,7 @@ const icon = computed(() => {
 
 const show = () => {
     visible.value = true
-    
+
     if (props.duration > 0) {
         clearTimeout(timer)
         timer = setTimeout(() => {
@@ -73,7 +73,7 @@ defineExpose({
     max-width: 400px;
     padding: 16px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px $shadow-color;
     z-index: 9999;
     display: flex;
     align-items: center;
@@ -123,23 +123,23 @@ defineExpose({
     }
 
     &--success {
-        background: linear-gradient(135deg, rgba(76, 175, 80, 0.95) 0%, rgba(56, 142, 60, 0.95) 100%);
-        color: #fff;
+        background: $success-gradient-color;
+        color: $primary-color;
     }
 
     &--error {
-        background: linear-gradient(135deg, rgba(244, 67, 54, 0.95) 0%, rgba(211, 47, 47, 0.95) 100%);
-        color: #fff;
+        background: $error-gradient-color;
+        color: $primary-color;
     }
 
     &--warning {
-        background: linear-gradient(135deg, rgba(255, 152, 0, 0.95) 0%, rgba(245, 124, 0, 0.95) 100%);
-        color: #fff;
+        background: $warning-gradient-color;
+        color: $primary-color;
     }
 
     &--info {
-        background: linear-gradient(135deg, rgba(33, 150, 243, 0.95) 0%, rgba(25, 118, 210, 0.95) 100%);
-        color: #fff;
+        background: $info-gradient-color;
+        color: $primary-color;
     }
 }
 
@@ -158,4 +158,3 @@ defineExpose({
     transform: translateX(100%);
 }
 </style>
-

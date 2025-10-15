@@ -64,7 +64,7 @@ onMounted(() => {
 
     &__title {
         font-size: 32px;
-        color: #fff;
+        color: $primary-color;
         line-height: 1;
         padding-inline: 14px;
         text-align: center;
@@ -72,7 +72,7 @@ onMounted(() => {
 
     &__subtitle {
         font-size: 14px;
-        color: #D0CBC3;
+        color: $secondary-color;
         line-height: 150%;
         padding-inline: 14px;
         text-align: center;

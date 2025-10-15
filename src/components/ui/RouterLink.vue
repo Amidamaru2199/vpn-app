@@ -38,10 +38,10 @@ const props = defineProps({
     align-items: center;
     width: 100%;
     min-height: 54px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: $router-link-background-color;
+    border: 1px solid $router-link-background-color;
     border-radius: 6px;
-    color: #fff;
+    color: $primary-color;
     text-decoration: none;
     padding-inline: 10px;
     overflow: hidden;
@@ -49,18 +49,18 @@ const props = defineProps({
     cursor: pointer;
 
     &_active {
-        border: 1px solid #DBD6CE;
-        background: linear-gradient(to right, #e53935, #f76c6c);
+        border: 1px solid $router-link-active-border-color;
+        background: $router-link-active-background-color;
 
         .router-link__duration,
         .router-link__price {
-            color: #fff;
+            color: $primary-color;
         }
     }
 
     &:hover {
-        border: 1px solid #DBD6CE;
-        background-color: rgba(255, 255, 255, 0.3);
+        border: 1px solid $router-link-active-border-color;
+        background-color: $router-link-background-hover-color;
     }
 
     &_main {
@@ -71,10 +71,7 @@ const props = defineProps({
             left: -75%;
             width: 50%;
             height: 100%;
-            background: linear-gradient(120deg,
-                    rgba(255, 255, 255, 0) 0%,
-                    rgba(255, 255, 255, 0.4) 50%,
-                    rgba(255, 255, 255, 0) 100%);
+            background: $router-link-main-color;
             transform: skewX(-20deg);
             animation: shine 3.2s infinite;
         }

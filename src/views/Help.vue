@@ -77,7 +77,7 @@ onMounted(() => {
     min-height: 100vh;
 
     .help__questions {
-        color: #fff;
+        color: $primary-color;
         margin: 20px 0 10px;
     }
 
@@ -88,7 +88,7 @@ onMounted(() => {
         gap: 10px;
         height: 42px;
         width: 100%;
-        color: #fff;
+        color: $primary-color;
         border: 1px solid rgba(255, 255, 255, .1);
         border-radius: 6px;
         text-decoration: none;
@@ -96,8 +96,8 @@ onMounted(() => {
         transition: .3s;
 
         &:hover {
-            border: 1px solid #DBD6CE;
-            background-color: rgba(255, 255, 255, 0.3);
+            border: 1px solid $router-link-active-border-color;
+            background-color: $router-link-background-hover-color;
         }
 
         svg {
@@ -110,53 +110,14 @@ onMounted(() => {
         font-size: 24px;
         line-height: 150%;
         margin-bottom: 5px;
-        color: #fff;
+        color: $primary-color;
     }
 
     .tarifes__subtitle {
         font-size: 14px;
         line-height: 150%;
         margin-bottom: 24px;
-        color: #D0CBC3;
-    }
-
-    .router-link {
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        min-height: 64px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 6px;
-        color: #fff;
-        text-decoration: none;
-        padding-inline: 10px;
-        overflow: hidden;
-        transition: 0.3s;
-
-        &:hover {
-            border: 1px solid #DBD6CE;
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        &:first-of-type {
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -75%;
-                width: 50%;
-                height: 100%;
-                background: linear-gradient(120deg,
-                        rgba(255, 255, 255, 0) 0%,
-                        rgba(255, 255, 255, 0.4) 50%,
-                        rgba(255, 255, 255, 0) 100%);
-                transform: skewX(-20deg);
-                animation: shine 3.2s infinite;
-            }
-        }
+        color: $secondary-color;
     }
 
     .tarifes__links {
@@ -173,24 +134,24 @@ onMounted(() => {
     .router-link__duration {
         font-size: 14px;
         line-height: 150%;
-        color: #D0CBC3;
+        color: $secondary-color;
     }
 
     .router-link__price {
         font-size: 12px;
         line-height: 150%;
-        color: #D0CBC3;
+        color: $secondary-color;
     }
 
     .tarifes__text {
         font-size: 12px;
         line-height: 150%;
-        color: #D0CBC3;
-        border: 1px solid #D0CBC3;
+        color: $secondary-color;
+        border: 1px solid $secondary-color;
         border-radius: 4px;
         margin-top: auto;
         padding: 5px;
-        background: rgba(255, 255, 255, 0.1);
+        background: $router-link-background-color;
 
         p:first-of-type {
             margin-bottom: 5px;

@@ -153,7 +153,7 @@ onMounted(() => {
         gap: 10px;
         height: 54px;
         width: 100%;
-        color: #fff;
+        color: $primary-color;
         background: transparent;
         border: 1px solid rgba(255, 255, 255, .1);
         border-radius: 6px;
@@ -163,8 +163,8 @@ onMounted(() => {
         cursor: pointer;
 
         &:hover {
-            border: 1px solid #DBD6CE;
-            background-color: rgba(255, 255, 255, 0.3);
+            border: 1px solid $router-link-active-border-color;
+            background-color: $router-link-background-hover-color;
         }
 
         svg {
@@ -200,14 +200,14 @@ onMounted(() => {
         font-size: 24px;
         line-height: 150%;
         margin-bottom: 5px;
-        color: #fff;
+        color: $primary-color;
     }
 
     &__subtitle {
         font-size: 14px;
         line-height: 150%;
         margin-bottom: 24px;
-        color: #D0CBC3;
+        color: $secondary-color;
     }
 
     &__links {

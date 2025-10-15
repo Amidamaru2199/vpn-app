@@ -18,7 +18,7 @@ export default defineConfig({
       name: 'vpn-app',
       short_name: 'vpn-app',
       description: 'vpn-app',
-      theme_color: '#ffffff',
+      theme_color: '#fff',
     },
 
     workbox: {
@@ -34,4 +34,11 @@ export default defineConfig({
       type: 'module',
     },
   })],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "./src/assets/constants.scss";`
+      }
+    }
+  },
 })
