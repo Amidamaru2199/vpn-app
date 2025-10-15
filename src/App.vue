@@ -57,21 +57,15 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-.preloader {
-	position: fixed;
-	inset: 0;
-	backdrop-filter: blur(20px);
-}
-
 .toast-container {
 	position: fixed;
-	top: 20px;
-	right: 20px;
+	top: 22px;
+	right: 14px;
 	z-index: 9999;
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
-	max-width: 400px;
+	max-width: calc(100% - 28px);
 }
 
 .toast {

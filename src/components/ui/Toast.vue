@@ -68,9 +68,9 @@ defineExpose({
 .toast {
     position: fixed;
     top: 20px;
-    right: 20px;
+    right: 14px;
     min-width: 280px;
-    max-width: 400px;
+    max-width: calc(100% - 28px);
     padding: 16px;
     border-radius: 8px;
     box-shadow: 0 4px 12px $shadow-color;
