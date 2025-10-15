@@ -15,7 +15,7 @@
                 <EartSVG />
             </template>
         </RouterLink>
-        <RouterLink text="Ответы на вопросы" :to="'/help'">
+        <RouterLink text="Поддержка" :to="'/help'">
             <template #icon>
                 <VoprosSVG />
             </template>
