@@ -2,8 +2,8 @@
     <div class="tarifes container">
         <h3 class="tarifes__title">Быстрая настройка</h3>
         <p class="tarifes__subtitle">Процесс первичной настройки</p>
-        <div class="tarifes__links">
-            <RouterLink component="div" v-for="tariff in usersStore.allTariffs" :key="tariff.id"
+        <div v-if="visibleTariffs.length > 0" class="tarifes__links">
+            <RouterLink component="div" v-for="tariff in visibleTariffs" :key="tariff.id"
                 @click="createPayment(tariff.id)">
                 <template #text>
                     <div class="tarifes__router-link-text">
@@ -13,6 +13,9 @@
                 </template>
             </RouterLink>
         </div>
+        <div v-else class="tarifes__title">
+            <p>Нет доступных тарифов</p>
+        </div>
         <div class="tarifes__text">
             <p>Оплата картой подключает автоплатёж. В настройках вы можете его отключить и указать email для получения чеков.</p>
         </div>
@@ -21,7 +24,7 @@
 
 <script setup>
 import RouterLink from "../components/ui/RouterLink.vue";
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
 import { useUsersStore } from "../stores";
 import { useTelegram } from "../composables/useTelegram";
 import { useToast } from '../composables/useToast'
@@ -29,6 +32,10 @@ import { useToast } from '../composables/useToast'
 const usersStore = useUsersStore();
 const { userId, initTelegram, showBackButton } = useTelegram();
 const { error: showError } = useToast()
+
+const visibleTariffs = computed(() => {
+    return usersStore.allTariffs.filter(tariff => !tariff.is_hidden)
+})
 
 const createPayment = async (tariff_id) => {
     if (!userId.value) {

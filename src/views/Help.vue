@@ -12,7 +12,7 @@
             </RouterLink>
         </div>
         <p class="help__questions">Не нащли ответ на свой вопрос?</p>
-        <a class="help__servers-link" href="#">
+        <a class="help__servers-link" href="https://t.me/AdronVpn_Support_Bot">
             <TelegramSVG />
             Тех поддержка
         </a>
