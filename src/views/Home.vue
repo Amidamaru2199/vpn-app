@@ -1,7 +1,7 @@
 <template>
     <div class="home container">
-        <ParticleImage :userSubscription="userSubscription" />
-        <HomeLinks />
+        <ParticleImage :userSubscription="userSubscription" :isSubscriptionExpired="isSubscriptionExpired" />
+        <HomeLinks :isSubscriptionExpired="isSubscriptionExpired" />
     </div>
 </template>
 
@@ -22,6 +22,23 @@ const { formatSubscriptionDate } = useDate();
 const userSubscription = computed(() => {
     const subscription = usersStore.user?.subscription;
     return subscription ? formatSubscriptionDate(subscription) : '';
+});
+
+// Computed свойство для определения, истекла ли подписка
+const isSubscriptionExpired = computed(() => {
+    const subscription = usersStore.user?.subscription;
+    if (!subscription) {
+        return true; // Если подписки нет, считаем что она истекла
+    }
+    
+    try {
+        const subscriptionDate = new Date(subscription);
+        const now = new Date();
+        return subscriptionDate <= now;
+    } catch (error) {
+        console.error('Ошибка при парсинге даты подписки:', error);
+        return true; // При ошибке считаем что подписка истекла
+    }
 });
 
 onMounted(async () => {

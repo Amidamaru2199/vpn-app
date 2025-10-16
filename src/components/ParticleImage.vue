@@ -2,22 +2,42 @@
     <div class="particle">
         <div class="particle__text-content">
             <!-- <p class="particle__title">Подписка активна</p> -->
-            <h3 class="particle__subtitle">Подписка активна до {{ userSubscription }}</h3>
+            <h3 class="particle__subtitle">{{ subscriptionStatus }}</h3>
         </div>
         <img class="particle__logo logo" id="logo" src="/img/ChatGPT Image 25 июл. 2025 г., 21_04_28.png" alt="">
     </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
 import { defineProps } from 'vue';
 
 const props = defineProps({
     userSubscription: {
         type: String,
         default: ''
+    },
+    isSubscriptionExpired: {
+        type: Boolean,
+        default: false
     }
 })
+
+// Computed свойство для определения статуса подписки
+const subscriptionStatus = computed(() => {
+    if (!props.userSubscription) {
+        return 'Подписка не найдена'
+    }
+    
+    if (props.isSubscriptionExpired) {
+        return 'Подписка закончилась'
+    } else {
+        return `Подписка активна до ${props.userSubscription}`
+    }
+})
+
+// Computed свойство для определения, истекла ли подписка (используем переданный пропс)
+const isSubscriptionExpired = computed(() => props.isSubscriptionExpired)
 
 let nextParticle = null;
 

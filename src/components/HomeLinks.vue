@@ -1,6 +1,6 @@
 <template>
     <div class="home__links">
-        <RouterLink class="router-link_main" text="Установить VPN" :to="'/configurations'">
+        <RouterLink v-if="!isSubscriptionExpired" class="router-link_main" text="Установить VPN" :to="'/configurations'">
             <template #icon>
                 <AtomSVG />
             </template>
@@ -10,7 +10,7 @@
                 <TarifesSVG />
             </template>
         </RouterLink>
-        <RouterLink text="Управление серверами" :to="'/servers'">
+        <RouterLink v-if="!isSubscriptionExpired" text="Управление серверами" :to="'/servers'">
             <template #icon>
                 <EartSVG />
             </template>
@@ -29,6 +29,14 @@ import VoprosSVG from "../components/icons/VoprosSVG.vue";
 import AtomSVG from "../components/icons/AtomSVG.vue";
 import TarifesSVG from "../components/icons/TarifesSVG.vue";
 import EartSVG from "../components/icons/EartSVG.vue";
+import { defineProps } from "vue";
+
+const props = defineProps({
+    isSubscriptionExpired: {
+        type: Boolean,
+        default: false
+    }
+});
 </script>
 
 <style>
