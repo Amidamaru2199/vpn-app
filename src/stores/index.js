@@ -4,7 +4,7 @@ import { getServers, updateUserMainServer, updateAutoPayments, updateEmail, getU
 import { useToast } from '../composables/useToast'
 
 export const useUsersStore = defineStore('users', () => {
-	const { success, error, info } = useToast()
+	const { success, error, modal } = useToast()
 	
 	const servers = ref(null)
 	const allTariffs = ref(null)
@@ -114,7 +114,7 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			const main_servers = getSelectedServerIds()
 			await updateUserMainServer(tg_id, main_servers)
-			success('Серверы успешно обновлены')
+			modal('Список стран для подписки успешно отредактирован. Нажмите кнопку обновления подписки в клиенте (V2RayTun, Hiddify и т.д.), чтобы они в нём появились.')
 			return true
 		} catch (err) {
 			error(`Ошибка при обновлении серверов: ${err}`)

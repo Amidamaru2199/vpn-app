@@ -2,24 +2,25 @@
 	<router-view></router-view>
 	<div class="toast-container">
 		<TransitionGroup name="toast-list">
-			<div 
-				v-for="toast in toasts" 
-				:key="toast.id"
-				class="toast" 
-				:class="`toast--${toast.type}`"
-			>
+			<div v-for="toast in toasts" :key="toast.id" class="toast" :class="`toast--${toast.type}`">
 				<div class="toast__content">
-					<span class="toast__icon">{{ getIcon(toast.type) }}</span>
+					<span v-if="toast.type !== 'modal'" class="toast__icon">{{ getIcon(toast.type) }}</span>
 					<span class="toast__message">{{ toast.message }}</span>
 				</div>
-				<button class="toast__close" @click="removeToast(toast.id)">×</button>
+				<button v-if="toast.type !== 'modal'" class="toast__close" @click="removeToast(toast.id)">×</button>
+				<button v-else class="toast__sucsess" @click="removeToast(toast.id)">ОК</button>
 			</div>
 		</TransitionGroup>
 	</div>
+
+	<!-- Overlay для модальных тостов -->
+	<Transition name="overlay">
+		<div v-if="hasModalToast" class="toast-overlay" @click="closeModalToast"></div>
+	</Transition>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
 import { useTelegram } from './composables/useTelegram'
 import { useUsersStore } from './stores/index.js'
 import { useToast } from './composables/useToast'
@@ -28,6 +29,19 @@ const usersStore = useUsersStore()
 const { error: showError } = useToast()
 const { userId, initTelegram, showBackButton } = useTelegram()
 const { toasts, remove: removeToast } = useToast()
+
+// Computed свойство для проверки наличия модальных тостов
+const hasModalToast = computed(() => {
+	return toasts.value.some(toast => toast.type === 'modal')
+})
+
+// Метод для закрытия модального тоста
+const closeModalToast = () => {
+	const modalToast = toasts.value.find(toast => toast.type === 'modal')
+	if (modalToast) {
+		removeToast(modalToast.id)
+	}
+}
 
 const getIcon = (type) => {
 	const icons = {
@@ -119,6 +133,19 @@ onMounted(async () => {
 	flex-shrink: 0;
 }
 
+.toast__sucsess {
+	background: $background-red-color;
+	color: $primary-color;
+	font-size: 14px;
+	line-height: 1.4;
+	word-break: break-word;
+	padding: 10px 20px;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: opacity 0.2s;
+	border: none;
+}
+
 .toast__close:hover {
 	opacity: 1;
 }
@@ -139,19 +166,54 @@ onMounted(async () => {
 	background: $info-gradient-color;
 }
 
-.toast-list-enter-active,
-.toast-list-leave-active {
-	transition: all 0.3s ease;
+.toast--modal {
+	display: flex;
+    flex-direction: column;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	padding: 24px 20px;
+	transform: translate(-50%, -50%);
+	min-width: 320px;
+	max-width: 90vw;
+	background: $body-background-color;
+	border: 1px solid $secondary-color;
+	backdrop-filter: blur(20px);
+	z-index: 10000;
+
+	.toast__content {
+		justify-content: center;
+		text-align: center;
+	}
+
+	.toast__message {
+		font-size: 20px;
+		font-weight: 500;
+	}
+
+	.toast__close {
+		position: absolute;
+		top: 12px;
+		right: 12px;
+		font-size: 24px;
+		opacity: 0.8;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
 }
 
-.toast-list-enter-from {
-	opacity: 0;
-	transform: translateX(100%);
-}
-
-.toast-list-leave-to {
-	opacity: 0;
-	transform: translateY(-10px);
+.toast-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	backdrop-filter: blur(5px);
+	z-index: 1000;
+	cursor: pointer;
+	transition: 0.3s ease;
 }
 
 @keyframes slideIn {
@@ -159,6 +221,7 @@ onMounted(async () => {
 		opacity: 0;
 		transform: translateX(100%);
 	}
+
 	to {
 		opacity: 1;
 		transform: translateX(0);

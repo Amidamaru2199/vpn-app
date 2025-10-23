@@ -1,8 +1,8 @@
-<template>
+<!-- <template>
     <Transition name="toast">
         <div v-if="visible" class="toast" :class="`toast--${type}`">
             <div class="toast__content">
-                <span class="toast__icon">{{ icon }}</span>
+                <span v-if="type !== 'modal'" class="toast__icon">{{ icon }}</span>
                 <span class="toast__message">{{ message }}</span>
             </div>
             <button class="toast__close" @click="hide">×</button>
@@ -20,8 +20,8 @@ const props = defineProps({
     },
     type: {
         type: String,
-        default: 'info', // 'success', 'error', 'warning', 'info'
-        validator: (value) => ['success', 'error', 'warning', 'info'].includes(value)
+        default: 'info', // 'success', 'error', 'warning', 'info', 'modal'
+        validator: (value) => ['success', 'error', 'warning', 'info', 'modal'].includes(value)
     },
     duration: {
         type: Number,
@@ -141,6 +141,42 @@ defineExpose({
         background: $info-gradient-color;
         color: $primary-color;
     }
+
+    &--modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 320px;
+        max-width: 90vw;
+        background: rgba(0, 0, 0, 0.9);
+        color: $primary-color;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(20px);
+        z-index: 10000;
+        
+        .toast__content {
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .toast__message {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .toast__close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 20px;
+            opacity: 0.8;
+            
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
 }
 
 .toast-enter-active,
@@ -157,4 +193,15 @@ defineExpose({
     opacity: 0;
     transform: translateX(100%);
 }
-</style>
+
+// Специальные анимации для модального тоста
+.toast--modal.toast-enter-from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+}
+
+.toast--modal.toast-leave-to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+}
+</style> -->

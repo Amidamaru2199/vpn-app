@@ -48,6 +48,10 @@ export function useToast() {
         return show(message, 'info', duration)
     }
 
+    const modal = (message, duration = 0) => {
+        return show(message, 'modal', duration)
+    }
+
     const clear = () => {
         toasts.value = []
     }
@@ -60,6 +64,7 @@ export function useToast() {
         error,
         warning,
         info,
+        modal,
         clear
     }
 }

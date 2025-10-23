@@ -14,7 +14,7 @@
             </button>
 
             <RouterLink component="div" v-for="server in usersStore.servers?.servers || []" :key="server.id"
-                :class="{ 'router-link_active': server.is_main && isEditMode, 'router-link_clickable': isEditMode }"
+                :class="{ 'router-link_active': server.is_main && isEditMode, 'router-link_clickable': isEditMode, 'router-link_border-active': server.is_main }"
                 @click="isEditMode ? handleServerClick(server.id) : copyToClipboard(server.key, 'Ключ сервера скопирован!')">
                 <template #icon>
                     <div class="servers-router-link__flag">
@@ -59,8 +59,8 @@ import { useTelegram } from '../composables/useTelegram'
 import { useClipboard } from '../composables/useClipboard'
 import { useToast } from '../composables/useToast'
 import { usePlatform } from '../composables/usePlatform'
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router'
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter, onBeforeRouteLeave } from 'vue-router'
 
 const router = useRouter()
 const { userId, initTelegram, showBackButton } = useTelegram()
@@ -69,6 +69,7 @@ const { error: showError } = useToast()
 const { detectPlatform } = usePlatform()
 const usersStore = useUsersStore()
 const isEditMode = ref(false)
+const originalServerStates = ref(null) // Для хранения исходного состояния серверов
 
 const getFlagEmoji = (code) => {
   const codePoints = code
@@ -78,8 +79,48 @@ const getFlagEmoji = (code) => {
   return String.fromCodePoint(...codePoints);
 }
 
+// Функция для сохранения исходного состояния серверов
+const saveOriginalServerStates = () => {
+    if (usersStore.servers?.servers) {
+        originalServerStates.value = usersStore.servers.servers.map(server => ({
+            id: server.id,
+            is_main: server.is_main
+        }))
+    }
+}
+
+// Функция для проверки изменений
+const hasServerChanges = () => {
+    if (!originalServerStates.value || !usersStore.servers?.servers) {
+        return false
+    }
+    
+    const currentStates = usersStore.servers.servers.map(server => ({
+        id: server.id,
+        is_main: server.is_main
+    }))
+    
+    // Сравниваем исходное состояние с текущим
+    return JSON.stringify(originalServerStates.value) !== JSON.stringify(currentStates)
+}
+
+// Функция для сброса изменений к исходному состоянию
+const resetServerChanges = () => {
+    if (originalServerStates.value && usersStore.servers?.servers) {
+        originalServerStates.value.forEach(originalState => {
+            const server = usersStore.servers.servers.find(s => s.id === originalState.id)
+            if (server) {
+                server.is_main = originalState.is_main
+            }
+        })
+    }
+    isEditMode.value = false
+    originalServerStates.value = null
+}
+
 const toggleEditMode = async () => {
     if (isEditMode.value) {
+        // Выход из режима редактирования
         const currentSelectedCount = usersStore.getSelectedServersCount()
         
         if (currentSelectedCount < 1) {
@@ -87,16 +128,24 @@ const toggleEditMode = async () => {
             return
         }
         
-        if (!userId.value) {
-            showError('Ошибка: Telegram ID не найден')
-            return
-        }
-        
-        const success = await usersStore.saveSelectedServers(userId.value)
-        if (success) {
+        // Проверяем, были ли изменения
+        if (hasServerChanges()) {
+            if (!userId.value) {
+                showError('Ошибка: Telegram ID не найден')
+                return
+            }
+            
+            const success = await usersStore.saveSelectedServers(userId.value)
+            if (success) {
+                isEditMode.value = false
+            }
+        } else {
+            // Изменений не было, просто выходим из режима редактирования
             isEditMode.value = false
         }
     } else {
+        // Вход в режим редактирования - сохраняем исходное состояние
+        saveOriginalServerStates()
         isEditMode.value = true
     }
 }
@@ -132,6 +181,23 @@ onMounted(() => {
     showBackButton(() => {
         router.back()
     })
+})
+
+// Обработчик для покидания страницы
+onBeforeRouteLeave((to, from, next) => {
+    if (isEditMode.value && hasServerChanges()) {
+        // Если есть несохраненные изменения, сбрасываем их
+        resetServerChanges()
+    }
+    next()
+})
+
+// Обработчик для закрытия/обновления страницы
+onBeforeUnmount(() => {
+    if (isEditMode.value && hasServerChanges()) {
+        // Если есть несохраненные изменения, сбрасываем их
+        resetServerChanges()
+    }
 })
 </script>
 
@@ -233,6 +299,8 @@ onMounted(() => {
 
     &-router-link__comment,
     &-router-link__duration {
+        display: flex;
+        align-items: center;
         font-size: 14px;
         line-height: 150%;
     }
