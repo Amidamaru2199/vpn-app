@@ -52,6 +52,10 @@ const isExternal = computed(() => props.to?.startsWith('http'))
     transition: 0.3s;
     cursor: pointer;
 
+    &_border-active {
+        background-color: $router-link-background-hover-color;
+    }
+
     &_active {
         border: 1px solid $router-link-active-border-color;
         background: $router-link-active-background-color;
@@ -60,9 +64,6 @@ const isExternal = computed(() => props.to?.startsWith('http'))
         .router-link__price {
             color: $primary-color;
         }
-    }
-    &_border-active {
-        border: 1px solid $background-red-color;
     }
 
     &:hover {

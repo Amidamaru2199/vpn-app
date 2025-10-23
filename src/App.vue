@@ -24,11 +24,13 @@ import { onMounted, computed } from 'vue';
 import { useTelegram } from './composables/useTelegram'
 import { useUsersStore } from './stores/index.js'
 import { useToast } from './composables/useToast'
+import { useRoute } from 'vue-router'
 
 const usersStore = useUsersStore()
 const { error: showError } = useToast()
 const { userId, initTelegram, showBackButton } = useTelegram()
 const { toasts, remove: removeToast } = useToast()
+const route = useRoute()
 
 // Computed свойство для проверки наличия модальных тостов
 const hasModalToast = computed(() => {
@@ -59,6 +61,11 @@ onMounted(async () => {
 	showBackButton(() => {
 		window.history.back()
 	})
+
+	// Не загружаем данные пользователя на странице OpenApp, так как она работает с query параметрами
+	if (route.path === '/openapp') {
+		return
+	}
 
 	if (userId.value) {
 		await usersStore.fetchUser(userId.value);
