@@ -12,9 +12,15 @@ export function useTelegram() {
                 user.value = telegramUser
                 userId.value = telegramUser.id
             }
+            // else {
+            //     userId.value = 804746752 // Fallback для разработки
+            // }
 
             tg.expand()
         }
+        // else {
+        //     userId.value = 804746752 // Fallback когда Telegram WebApp API недоступен
+        // }
     }
 
     const showBackButton = (callback) => {

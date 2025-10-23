@@ -14,7 +14,7 @@
             </button>
 
             <RouterLink component="div" v-for="server in usersStore.servers?.servers || []" :key="server.id"
-                :class="{ 'router-link_active': server.is_main, 'router-link_clickable': isEditMode }"
+                :class="{ 'router-link_active': server.is_main && isEditMode, 'router-link_clickable': isEditMode }"
                 @click="isEditMode ? handleServerClick(server.id) : copyToClipboard(server.key, 'Ключ сервера скопирован!')">
                 <template #icon>
                     <div class="servers-router-link__flag">
@@ -168,8 +168,8 @@ onMounted(() => {
         }
 
         svg {
-            width: 25px;
-            height: 25px;
+            width: 32px;
+            height: 32px;
 
             &:last-of-type {
                 margin-left: auto;

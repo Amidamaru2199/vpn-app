@@ -30,7 +30,7 @@ const subscriptionStatus = computed(() => {
     }
     
     if (props.isSubscriptionExpired) {
-        return 'Подписка закончилась'
+        return 'Подписка истекла. Продлите её в разделе «Тарифы»'
     } else {
         return `Подписка активна до ${props.userSubscription}`
     }
