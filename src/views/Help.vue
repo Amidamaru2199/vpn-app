@@ -3,10 +3,10 @@
         <h3 class="help__title">Помощь</h3>
         <p class="help__subtitle">Тут ответы на все вопросы</p>
         <div class="help__links">
-            <RouterLink :to="'https://telegra.ph/Instrukciya-po-podklyucheniyu-iOS-cherez-V2RayTun-06-25'">
+            <RouterLink v-for="link in helpLinks" :key="link.title" :to="link.link">
                 <template #text>
                     <span class="help__router-link-text">
-                        Инструкция по подключению iOS через V2RayTun
+                        {{ link.title }}
                     </span>
                 </template>
             </RouterLink>
@@ -22,7 +22,20 @@
 <script setup>
 import RouterLink from "../components/ui/RouterLink.vue";
 import TelegramSVG from '../components/icons/TelegramSVG.vue';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+
+const helpLinks = ref(
+    [
+        {
+            title: 'Как настроить VPN на своём устройстве',
+            link: 'https://telegra.ph/Kak-nastroit-VPN-na-svoyom-ustrojstve-10-23',
+        },
+        {
+            title: 'Как подключить другое устройство по своей подписке',
+            link: 'https://telegra.ph/Kak-podklyuchit-drugoe-ustrojstvo-po-svoej-podpiske-10-23',
+        },
+    ]
+)
 
 onMounted(() => {
     const tg = window.Telegram?.WebApp;
