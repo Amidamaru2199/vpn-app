@@ -40,7 +40,7 @@ const installProfile = () => {
 		return
 	}
 
-	const configUrl = `https://bot.adronvpn.ru/key/main/${userId.value}`
+	const configUrl = `https://new.adronvpn.ru/key/main/${userId.value}`
 	const platform = currentPlatform.value || 'unknown'
 	
 	// Формируем полный URL для страницы OpenApp
@@ -66,7 +66,7 @@ const copySubscriptionLink = () => {
 		return
 	}
 
-	const subscriptionUrl = `https://bot.adronvpn.ru/key/main/${userId.value}`
+	const subscriptionUrl = `https://new.adronvpn.ru/key/main/${userId.value}`
 	copyToClipboard(subscriptionUrl, `Ссылка на подписку скопирована! Откройте ${isWindows.value ? 'Hiddify' : 'V2Raytun'} и вставьте её вручную.`)
 }
 
