@@ -69,7 +69,6 @@ onMounted(async () => {
 
 	if (userId.value) {
 		await usersStore.fetchUser(userId.value);
-		await usersStore.fetchServers(userId.value)
 		await usersStore.fetchAllTariffs()
 	} else {
 		showError('Ошибка: Telegram ID не найден')

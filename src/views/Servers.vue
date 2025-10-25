@@ -37,10 +37,10 @@
                     </div>
                 </template>
                 <template #arrow>
-                    <Checkbox v-if="isEditMode" :modelValue="server.is_main" 
-                        @update:modelValue="(value) => handleServerSelect(server.id, value)"
-                        @click.stop />
-                    <button class="servers__copy-button" v-else @click.stop="copyToClipboard(server.key, 'Ключ сервера скопирован!')">
+                    <Checkbox v-if="isEditMode" :modelValue="server.is_main"
+                        @update:modelValue="(value) => handleServerSelect(server.id, value)" @click.stop />
+                    <button class="servers__copy-button" v-else
+                        @click.stop="copyToClipboard(server.key, 'Ключ сервера скопирован!')">
                         <KeySVG />
                     </button>
                 </template>
@@ -72,11 +72,11 @@ const isEditMode = ref(false)
 const originalServerStates = ref(null) // Для хранения исходного состояния серверов
 
 const getFlagEmoji = (code) => {
-  const codePoints = code
-    .toUpperCase()
-    .split('')
-    .map(char => 127397 + char.charCodeAt());
-  return String.fromCodePoint(...codePoints);
+    const codePoints = code
+        .toUpperCase()
+        .split('')
+        .map(char => 127397 + char.charCodeAt());
+    return String.fromCodePoint(...codePoints);
 }
 
 // Функция для сохранения исходного состояния серверов
@@ -94,12 +94,12 @@ const hasServerChanges = () => {
     if (!originalServerStates.value || !usersStore.servers?.servers) {
         return false
     }
-    
+
     const currentStates = usersStore.servers.servers.map(server => ({
         id: server.id,
         is_main: server.is_main
     }))
-    
+
     // Сравниваем исходное состояние с текущим
     return JSON.stringify(originalServerStates.value) !== JSON.stringify(currentStates)
 }
@@ -122,19 +122,19 @@ const toggleEditMode = async () => {
     if (isEditMode.value) {
         // Выход из режима редактирования
         const currentSelectedCount = usersStore.getSelectedServersCount()
-        
+
         if (currentSelectedCount < 1) {
             showError('Должен быть выбран хотя бы 1 сервер')
             return
         }
-        
+
         // Проверяем, были ли изменения
         if (hasServerChanges()) {
             if (!userId.value) {
                 showError('Ошибка: Telegram ID не найден')
                 return
             }
-            
+
             const success = await usersStore.saveSelectedServers(userId.value)
             if (success) {
                 isEditMode.value = false
@@ -153,30 +153,32 @@ const toggleEditMode = async () => {
 const handleServerClick = (serverId) => {
     const server = usersStore.servers?.servers?.find(s => s.id === serverId)
     if (!server) return
-    
+
     handleServerSelect(serverId, !server.is_main)
 }
 
 const handleServerSelect = (serverId, value) => {
     const maxServers = usersStore.servers?.max_servers || 6
     const currentSelectedCount = usersStore.getSelectedServersCount()
-    
+
     if (value && currentSelectedCount >= maxServers) {
         showError(`Максимальное количество серверов: ${maxServers}. Сначала отключите другой сервер.`)
         return
     }
-    
+
     if (!value && currentSelectedCount <= 1) {
         showError('Должен быть выбран хотя бы 1 сервер')
         return
     }
-    
+
     usersStore.toggleServerSelection(serverId, value)
 }
 
-onMounted(() => {
+onMounted(async () => {
     detectPlatform()
     initTelegram()
+
+    await usersStore.fetchServers(userId.value)
 
     showBackButton(() => {
         router.back()
