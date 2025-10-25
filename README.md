@@ -15,7 +15,7 @@ npm run dev
 npm run build
 ```
 
-### Деплой на https://bot.adronvpn.ru/vpn-app/
+### Деплой на https://new.adronvpn.ru/vpn-app/
 ```bash
 # Быстрое обновление (рекомендуется)
 ./update-and-deploy.sh
@@ -34,8 +34,8 @@ npm run build
 
 ## 🌐 URL после деплоя
 
-**Приложение:** https://bot.adronvpn.ru/vpn-app/  
-**Бот (без изменений):** https://bot.adronvpn.ru/
+**Приложение:** https://new.adronvpn.ru/vpn-app/  
+**Бот (без изменений):** https://new.adronvpn.ru/
 
 ## 📱 PWA функции
 

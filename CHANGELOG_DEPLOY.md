@@ -70,8 +70,8 @@
 ## ⚠️ Что проверить после деплоя
 
 1. **URL с хэшем:**
-   - Основная: `https://bot.adronvpn.ru/vpn-app/`
-   - Роуты: `https://bot.adronvpn.ru/vpn-app/#/configurations`
+   - Основная: `https://new.adronvpn.ru/vpn-app/`
+   - Роуты: `https://new.adronvpn.ru/vpn-app/#/configurations`
    - Hash mode работает лучше с nginx (не нужен сложный try_files)
 
 2. **Toast уведомления:**
