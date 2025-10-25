@@ -1,4 +1,4 @@
-const API_URL = 'https://new.adronvpn.ru'
+const API_URL = 'https://app.adron-soft.ru'
 
 // GET
 export const getServers = async (tg_id) => {
