@@ -34,6 +34,10 @@ const helpLinks = ref(
             title: 'Как подключить другое устройство по своей подписке',
             link: 'https://telegra.ph/Kak-podklyuchit-drugoe-ustrojstvo-po-svoej-podpiske-10-23',
         },
+        {
+            title: 'Как выключить автоплатеж',
+            link: 'https://telegra.ph/Kak-vyklyuchit-avtoplatyozh-10-24',
+        },
     ]
 )
 
