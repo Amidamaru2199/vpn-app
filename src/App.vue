@@ -1,5 +1,6 @@
 <template>
 	<router-view></router-view>
+	<Preloader />
 	<div class="toast-container">
 		<TransitionGroup name="toast-list">
 			<div v-for="toast in toasts" :key="toast.id" class="toast" :class="`toast--${toast.type}`">
@@ -25,6 +26,7 @@ import { useTelegram } from './composables/useTelegram'
 import { useUsersStore } from './stores/index.js'
 import { useToast } from './composables/useToast'
 import { useRoute } from 'vue-router'
+import Preloader from './components/ui/Preloader.vue'
 
 const usersStore = useUsersStore()
 const { error: showError } = useToast()
@@ -62,16 +64,15 @@ onMounted(async () => {
 		window.history.back()
 	})
 
-	// Не загружаем данные пользователя на странице OpenApp, так как она работает с query параметрами
-	if (route.path === '/openapp') {
-		return
-	}
-
 	if (userId.value) {
 		await usersStore.fetchUser(userId.value);
 		await usersStore.fetchAllTariffs()
 	} else {
-		showError('Ошибка: Telegram ID не найден')
+		if (route.path === '/openapp') {
+			return
+		} else {
+			showError('Ошибка: Telegram ID не найден')
+		}
 	}
 })
 </script>
@@ -174,7 +175,7 @@ onMounted(async () => {
 
 .toast--modal {
 	display: flex;
-    flex-direction: column;
+	flex-direction: column;
 	position: fixed;
 	top: 50%;
 	left: 50%;
