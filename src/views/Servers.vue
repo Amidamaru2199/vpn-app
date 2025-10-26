@@ -33,7 +33,7 @@
                             <span class="servers-router-link__duration">{{ server.country }}</span>
                             <span class="servers-router-link__price">{{ server.name }}</span>
                         </div>
-                        <span class="servers-router-link__comment">{{ server.comment }}</span>
+                        <span v-if="server.comment" class="servers-router-link__comment">{{ server.comment }}</span>
                     </div>
                 </template>
                 <template #arrow>
@@ -289,8 +289,9 @@ onBeforeUnmount(() => {
     }
 
     &-router-link__text {
-        display: flex;
-        gap: 24px;
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        gap: 14px;
         margin: 0 auto 0 10px;
     }
 
@@ -299,17 +300,28 @@ onBeforeUnmount(() => {
         flex-direction: column;
     }
 
-    &-router-link__comment,
     &-router-link__duration {
         display: flex;
         align-items: center;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 150%;
+        letter-spacing: .5px;
+        font-family: "PFBulletinSansProMedium";
+    }
+
+    &-router-link__comment {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        line-height: 150%;
+        letter-spacing: .5px;
+        font-size: 12px;
     }
 
     &-router-link__price {
-        font-size: 12px;
-        line-height: 150%;
+        font-size: 14px;
+        line-height: 1;
+        letter-spacing: .5px;
     }
 }
 </style>

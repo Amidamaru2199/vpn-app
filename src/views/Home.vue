@@ -55,6 +55,6 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-image: url('/img/maps.png');
+    // background-image: url('/img/maps.png');
 }
 </style>

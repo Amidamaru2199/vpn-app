@@ -6,8 +6,8 @@ import { useToast } from '../composables/useToast'
 export const useUsersStore = defineStore('users', () => {
 	const { success, error, modal } = useToast()
 	
-	const servers = ref(null)
-	const allTariffs = ref(null)
+	const servers = ref([])
+	const allTariffs = ref([])
 	const user = ref(null)
 	const payments = ref(null)
 	const email = ref('')

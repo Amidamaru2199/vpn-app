@@ -1,14 +1,14 @@
 <template>
     <div class="tarifes container">
-        <h3 class="tarifes__title">Быстрая настройка</h3>
-        <p class="tarifes__subtitle">Процесс первичной настройки</p>
+        <h3 class="tarifes__title">Продление подписки</h3>
+        <p class="tarifes__subtitle">Выберите тариф:</p>
         <div v-if="visibleTariffs.length > 0" class="tarifes__links">
             <RouterLink component="div" v-for="tariff in visibleTariffs" :key="tariff.id"
                 @click="createPayment(tariff.id)">
                 <template #text>
                     <div class="tarifes__router-link-text">
                         <span class="tarifes__router-link-duration">{{ tariff.name }} за {{ tariff.price }} руб.</span>
-                        <span class="tarifes__router-link-price">{{ tariff.price }} руб в месяц</span>
+                        <span class="tarifes__router-link-price">{{ daysFormatter(tariff) }} руб в месяц</span>
                     </div>
                 </template>
             </RouterLink>
@@ -36,6 +36,10 @@ const { error: showError } = useToast()
 const visibleTariffs = computed(() => {
     return usersStore.allTariffs.filter(tariff => !tariff.is_hidden)
 })
+
+const daysFormatter = (tariff) => {
+    return tariff.price / (tariff.days / 30)
+}
 
 const createPayment = async (tariff_id) => {
     if (!userId.value) {
@@ -100,7 +104,7 @@ onMounted(() => {
     &__router-link-duration {
         font-size: 14px;
         line-height: 150%;
-        color: $secondary-color;
+        color: $primary-color;
     }
 
     &__router-link-price {
@@ -115,12 +119,12 @@ onMounted(() => {
         color: $secondary-color;
         border: 1px solid $secondary-color;
         border-radius: 4px;
-        margin-top: auto;
+        margin-top: 32px;
         padding: 5px;
         background: $background-color;
 
-        p:first-of-type {
-            margin-bottom: 5px;
+        p {
+            font-size: 14px;
         }
     }
 }
