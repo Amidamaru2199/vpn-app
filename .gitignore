@@ -13,6 +13,9 @@ dist-ssr
 dev-dist
 *.local
 
+# Deploy archives
+*.tar.gz
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

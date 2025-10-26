@@ -11,7 +11,7 @@
                 </template>
             </RouterLink>
         </div>
-        <p class="help__questions">Не нащли ответ на свой вопрос?</p>
+        <p class="help__questions">Не нашли ответ на свой вопрос?</p>
         <a class="help__servers-link" href="https://t.me/AdronVpn_Support_Bot">
             <TelegramSVG />
             Тех поддержка
@@ -37,6 +37,10 @@ const helpLinks = ref(
         {
             title: 'Как выключить автоплатеж',
             link: 'https://telegra.ph/Kak-vyklyuchit-avtoplatyozh-10-24',
+        },
+         {
+            title: 'Как настроить VPN на Windows',
+            link: 'https://telegra.ph/Kak-nastroit-na-Windows-10-26',
         },
     ]
 )
