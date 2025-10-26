@@ -31,16 +31,20 @@ const helpLinks = ref(
             link: 'https://telegra.ph/Kak-nastroit-VPN-na-svoyom-ustrojstve-10-23',
         },
         {
+            title: 'Как настроить VPN на Android TV',
+            link: 'https://telegra.ph/Kak-nastroit-VPN-na-Android-TV-10-26',
+        },
+        {
             title: 'Как подключить другое устройство по своей подписке',
             link: 'https://telegra.ph/Kak-podklyuchit-drugoe-ustrojstvo-po-svoej-podpiske-10-23',
         },
         {
-            title: 'Как выключить автоплатеж',
-            link: 'https://telegra.ph/Kak-vyklyuchit-avtoplatyozh-10-24',
-        },
-         {
             title: 'Как настроить VPN на Windows',
             link: 'https://telegra.ph/Kak-nastroit-na-Windows-10-26',
+        },
+        {
+            title: 'Как выключить автоплатеж',
+            link: 'https://telegra.ph/Kak-vyklyuchit-avtoplatyozh-10-24',
         },
     ]
 )
