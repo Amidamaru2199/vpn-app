@@ -135,7 +135,7 @@ echo -e "${GREEN}✅ Архивы очищены${NC}"
 echo -e "${YELLOW}🧪 Проверяем результат...${NC}"
 
 # Проверяем HTTP статус
-HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://new.adronvpn.ru/vpn-app/)
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://app.adron-soft.ru/vpn-app/)
 
 if [ "$HTTP_STATUS" == "200" ]; then
     echo -e "${GREEN}✅ Приложение доступно и отвечает!${NC}"
@@ -146,8 +146,8 @@ fi
 # ========== ГОТОВО ==========
 echo ""
 echo -e "${GREEN}🎉 Деплой завершён успешно!${NC}"
-echo -e "${BLUE}🌐 Приложение доступно по адресу: https://new.adronvpn.ru/vpn-app/${NC}"
-echo -e "${BLUE}🤖 Основной бот: https://new.adronvpn.ru/${NC}"
+echo -e "${BLUE}🌐 Приложение доступно по адресу: https://app.adron-soft.ru/vpn-app/${NC}"
+echo -e "${BLUE}🤖 Основной бот: https://app.adron-soft.ru/${NC}"
 echo ""
 echo -e "${YELLOW}📊 Для мониторинга логов:${NC}"
 echo -e "${BLUE}   ssh ${SERVER_USER}@${SERVER_HOST} 'sudo tail -f /var/log/nginx/error.log'${NC}"
