@@ -29,9 +29,8 @@ import { useRoute } from 'vue-router'
 import Preloader from './components/ui/Preloader.vue'
 
 const usersStore = useUsersStore()
-const { error: showError } = useToast()
-const { userId, initTelegram, showBackButton } = useTelegram()
-const { toasts, remove: removeToast } = useToast()
+const { error: showError, toasts, remove: removeToast } = useToast()
+const { initTelegram, showBackButton } = useTelegram()
 const route = useRoute()
 
 // Computed свойство для проверки наличия модальных тостов
@@ -60,18 +59,21 @@ const getIcon = (type) => {
 onMounted(async () => {
 	initTelegram()
 
+	const tg = window.Telegram?.WebApp
+	const userData = tg?.initDataUnsafe?.user
+
 	showBackButton(() => {
 		window.history.back()
 	})
 
-	if (userId.value) {
-		await usersStore.fetchUser(userId.value);
+	if (userData?.id) {
+		await usersStore.fetchUser(userData.id);
 		await usersStore.fetchAllTariffs()
 	} else {
 		if (route.path === '/openapp') {
 			return
 		} else {
-			showError('Ошибка: Telegram ID не найден 1. Пожалуйста обратитесь в поддержку')
+			showError('Ошибка app: Telegram ID не найден. Пожалуйста обратитесь в поддержку')
 		}
 	}
 })
