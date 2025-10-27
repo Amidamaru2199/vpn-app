@@ -43,7 +43,7 @@ const daysFormatter = (tariff) => {
 
 const createPayment = async (tariff_id) => {
     if (!userId.value) {
-        showError('Ошибка: Telegram ID не найден')
+        showError('Ошибка: Telegram ID не найден 5')
         return
     }
     

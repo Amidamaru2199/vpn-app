@@ -43,7 +43,7 @@ const email = ref('')
 
 const toggleAutoPayments = async (value) => {
     if (!userId.value) {
-        showError('Ошибка: Telegram ID не найден')
+        showError('Ошибка: Telegram ID не найден 3. Пожалуйста обратитесь в поддержку')
         return
     }
 
@@ -52,7 +52,7 @@ const toggleAutoPayments = async (value) => {
 
 const updateEmail = async () => {
     if (!userId.value) {
-        showError('Ошибка: Telegram ID не найден')
+        showError('Ошибка: Telegram ID не найден 4. Пожалуйста обратитесь в поддержку')
         return
     }
 
