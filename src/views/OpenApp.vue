@@ -18,7 +18,7 @@
 			Установить {{ isWindows ? 'Hiddify' : 'V2Raytun' }}
 		</button>
 
-		<a href="http://gavnetzobot" target="_blank" class="openapp__link">
+		<a href="https://t.me/adronVpnBot" target="_blank" class="openapp__link">
 			Вернуться в телеграм
 		</a>
 
