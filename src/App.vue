@@ -70,11 +70,13 @@ onMounted(async () => {
 		await usersStore.fetchUser(userData.id);
 		await usersStore.fetchAllTariffs()
 	} else {
-		if (route.path === '/openapp') {
-			return
-		} else {
-			showError('Ошибка app: Telegram ID не найден. Пожалуйста обратитесь в поддержку')
-		}
+		setTimeout(() => {
+			if (route.path === '/openapp') {
+				return
+			} else {
+				showError('Ошибка app: Telegram ID не найден. Пожалуйста обратитесь в поддержку')
+			}
+		}, 100)
 	}
 })
 </script>
