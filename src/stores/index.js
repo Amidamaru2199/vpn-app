@@ -18,7 +18,7 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			isLoading.value = true
 			const data = await getServers(tg_id)
-			servers.value = data.сервера
+			servers.value = data.servers
 		} catch (err) {
 			error(`Ошибка при загрузке серверов: ${err}`)
 			console.error('Failed to fetch servers:', err)
@@ -32,7 +32,7 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			isLoading.value = true
 			const data = await getAllTariffs()
-			allTariffs.value = data.тарифы
+			allTariffs.value = data.tariffs
 		} catch (err) {
 			error(`Ошибка при загрузке тарифов: ${err}`)
 			console.error('Failed to fetch tariffs:', err)
@@ -45,11 +45,11 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			isLoading.value = true
 			const data = await getUser(tg_id)
-			user.value = data.юзер
+			user.value = data.user
 
 			if (data) {
-				autoPayments.value = data.юзер.is_auto_payment || false
-				email.value = data.юзер.email || ''
+				autoPayments.value = data.user.is_auto_payment || false
+				email.value = data.user.email || ''
 			}
 		} catch (err) {
 			error(`Ошибка при загрузке данных пользователя`)
