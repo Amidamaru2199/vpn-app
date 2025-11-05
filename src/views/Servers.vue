@@ -131,7 +131,7 @@ const toggleEditMode = async () => {
         // Проверяем, были ли изменения
         if (hasServerChanges()) {
             if (!userId.value) {
-                showError('Ошибка: Telegram ID не найден 2. Пожалуйста обратитесь в поддержку')
+                showError('Ошибка: Telegram ID не найден 2. Пожалуйста, обратитесь в поддержку')
                 return
             }
 

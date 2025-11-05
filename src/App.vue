@@ -74,7 +74,7 @@ onMounted(async () => {
 			if (route.path === '/openapp') {
 				return
 			} else {
-				showError('Ошибка app: Telegram ID не найден. Пожалуйста обратитесь в поддержку')
+				showError('Ошибка app: Telegram_ID не найден. Пожалуйста, обратитесь в поддержку')
 			}
 		}, 100)
 	}
