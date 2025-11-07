@@ -46,6 +46,10 @@ const helpLinks = ref(
             title: 'Как выключить автоплатеж',
             link: 'https://telegra.ph/Kak-vyklyuchit-avtoplatyozh-10-24',
         },
+        {
+            title: 'Не работает VPN. Что делать?',
+            link: 'https://telegra.ph/Ne-rabotaet-VPN-CHto-delat-11-07',
+        },
     ]
 )
 
