@@ -59,15 +59,23 @@ const getIcon = (type) => {
 onMounted(async () => {
 	initTelegram()
 
+	// const tg = window.Telegram?.WebApp
+	// const userData = tg?.initDataUnsafe?.user
+
 	const tg = window.Telegram?.WebApp
-	const userData = tg?.initDataUnsafe?.user
+    const initData = tg?.initData;
+    const params = new URLSearchParams(initData);
+
+    // user — это JSON, но в виде строки, нужно распарсить:
+    const userRaw = params.get("user");
+    const user = userRaw ? JSON.parse(decodeURIComponent(userRaw)) : null;
 
 	showBackButton(() => {
 		window.history.back()
 	})
 
-	if (userData?.id) {
-		await usersStore.fetchUser(userData.id);
+	if (user?.id) {
+		await usersStore.fetchUser(user.id);
 		await usersStore.fetchAllTariffs()
 	} else {
 		setTimeout(() => {
