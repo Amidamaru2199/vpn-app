@@ -43,6 +43,10 @@ const helpLinks = ref(
             link: 'https://telegra.ph/Kak-nastroit-na-Windows-10-26',
         },
         {
+            title: 'Обход блокировок мобильного интернета по белому списку',
+            link: 'https://telegra.ph/Obhod-blokirovok-mobilnogo-interneta-po-belym-spiskam-11-11',
+        },
+        {
             title: 'Как выключить автоплатеж',
             link: 'https://telegra.ph/Kak-vyklyuchit-avtoplatyozh-10-24',
         },
