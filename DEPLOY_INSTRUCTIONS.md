@@ -24,13 +24,13 @@ sudo chown $USER:$USER /var/www/vpn-app
 #### Вариант А: Через SCP (рекомендуется)
 ```bash
 # На твоём локальном компьютере из папки vpn-app:
-scp -r dist/* root@77.110.105.100:/var/www/vpn-app/dist/
+scp -r dist/* root@178.130.63.247:/var/www/vpn-app/dist/
 ```
 
 #### Вариант Б: Через rsync (более надёжно)
 ```bash
 # С локального компьютера:
-rsync -avz --delete dist/ root@77.110.105.100:/var/www/vpn-app/dist/
+rsync -avz --delete dist/ root@178.130.63.247:/var/www/vpn-app/dist/
 ```
 
 #### Вариант В: Архивом
@@ -39,7 +39,7 @@ rsync -avz --delete dist/ root@77.110.105.100:/var/www/vpn-app/dist/
 tar -czf vpn-app-dist.tar.gz -C dist .
 
 # Загрузи на сервер:
-scp vpn-app-dist.tar.gz root@77.110.105.100:/tmp/
+scp vpn-app-dist.tar.gz root@178.130.63.247:/tmp/
 
 # На сервере распакуй:
 cd /var/www/vpn-app
@@ -66,7 +66,7 @@ sudo ls /etc/nginx/sites-enabled/
 #### 3.2 Добавь конфигурацию для VPN App
 ```bash
 # Загрузи конфигурацию с локального компьютера:
-scp nginx-vpn-app.conf root@77.110.105.100:/tmp/
+scp nginx-vpn-app.conf root@178.130.63.247:/tmp/
 
 # На сервере открой СУЩЕСТВУЮЩИЙ конфигурационный файл nginx:
 sudo nano /etc/nginx/sites-available/default  # или другой файл конфигурации
@@ -159,7 +159,7 @@ sudo tail -f /var/log/nginx/error.log
 
 2. **Загрузи на сервер:**
    ```bash
-   rsync -avz --delete dist/ root@77.110.105.100:/var/www/vpn-app/dist/
+   rsync -avz --delete dist/ root@178.130.63.247:/var/www/vpn-app/dist/
    ```
 
 3. **Готово!** Nginx сразу начнёт отдавать новые файлы

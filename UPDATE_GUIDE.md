@@ -38,7 +38,7 @@ npm run build
 
 ### 403 Forbidden после обновления
 ```bash
-ssh root@77.110.105.100
+ssh root@178.130.63.247
 sudo chown -R www-data:www-data /var/www/vpn-app/
 sudo chmod -R 755 /var/www/vpn-app/
 ```
@@ -48,7 +48,7 @@ sudo chmod -R 755 /var/www/vpn-app/
 2. **Проверь консоль** на ошибки JavaScript
 3. **Проверь логи nginx:**
    ```bash
-   ssh root@77.110.105.100 'sudo tail -f /var/log/nginx/error.log'
+   ssh root@178.130.63.247 'sudo tail -f /var/log/nginx/error.log'
    ```
 
 ### Service Worker не обновляется
@@ -69,7 +69,7 @@ sudo chmod -R 755 /var/www/vpn-app/
 Если что-то пошло не так:
 
 ```bash
-ssh root@77.110.105.100
+ssh root@178.130.63.247
 sudo rm -rf /var/www/vpn-app/dist
 sudo mv /var/www/vpn-app/dist.backup /var/www/vpn-app/dist
 sudo systemctl reload nginx
@@ -85,12 +85,12 @@ curl -I https://app.adron-soft.ru/vpn-app/
 
 ### Логи nginx
 ```bash
-ssh root@77.110.105.100 'sudo tail -f /var/log/nginx/error.log'
+ssh root@178.130.63.247 'sudo tail -f /var/log/nginx/error.log'
 ```
 
 ### Размер приложения
 ```bash
-ssh root@77.110.105.100 'du -sh /var/www/vpn-app/dist/'
+ssh root@178.130.63.247 'du -sh /var/www/vpn-app/dist/'
 ```
 
 ---

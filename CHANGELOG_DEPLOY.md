@@ -104,7 +104,7 @@ npm run build
 ## 🔙 Откат если что-то пошло не так
 
 ```bash
-ssh root@77.110.105.100
+ssh root@178.130.63.247
 sudo rm -rf /var/www/vpn-app/dist
 sudo mv /var/www/vpn-app/dist.backup /var/www/vpn-app/dist
 sudo systemctl reload nginx
