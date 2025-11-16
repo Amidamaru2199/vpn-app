@@ -1,6 +1,6 @@
 <template>
 	<router-view></router-view>
-	<Preloader />
+	<Preloader :isInitializing="isInitializing" />
 	<div class="toast-container">
 		<TransitionGroup name="toast-list">
 			<div v-for="toast in toasts" :key="toast.id" class="toast" :class="`toast--${toast.type}`">
@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import { useTelegram } from './composables/useTelegram'
 import { useUsersStore } from './stores/index.js'
 import { useToast } from './composables/useToast'
@@ -32,6 +32,7 @@ const usersStore = useUsersStore()
 const { error: showError, toasts, remove: removeToast } = useToast()
 const { initTelegram, showBackButton } = useTelegram()
 const route = useRoute()
+const isInitializing = ref(true)
 
 // Computed свойство для проверки наличия модальных тостов
 const hasModalToast = computed(() => {
@@ -59,33 +60,57 @@ const getIcon = (type) => {
 onMounted(async () => {
 	initTelegram()
 
-	// const tg = window.Telegram?.WebApp
-	// const userData = tg?.initDataUnsafe?.user
-
-	const tg = window.Telegram?.WebApp
-    const initData = tg?.initData;
-    const params = new URLSearchParams(initData);
-
-    // user — это JSON, но в виде строки, нужно распарсить:
-    const userRaw = params.get("user");
-    const user = userRaw ? JSON.parse(decodeURIComponent(userRaw)) : null;
-
 	showBackButton(() => {
 		window.history.back()
 	})
 
-	if (user?.id) {
-		await usersStore.fetchUser(user.id);
+	// Даём время Telegram WebApp инициализироваться
+	await new Promise(resolve => setTimeout(resolve, 2000))
+
+	const tg = window.Telegram?.WebApp
+	const user = tg?.initDataUnsafe?.user
+
+	// Попытка получить данные из разных источников
+	let userId = user?.id
+
+	// Альтернативный способ парсинга, если первый не сработал
+	if (!userId && tg?.initData) {
+		try {
+			const params = new URLSearchParams(tg.initData)
+			const userRaw = params.get("user")
+			if (userRaw) {
+				const parsedUser = JSON.parse(decodeURIComponent(userRaw))
+				userId = parsedUser?.id
+			}
+		} catch (e) {
+			console.error('Ошибка парсинга user данных:', e)
+		}
+	}
+
+	// Режим разработки - раскомментируйте если нужен тестовый ID
+	// if (!userId && import.meta.env.DEV) {
+	// 	userId = 804746752 // Тестовый ID для разработки
+	// 	console.warn('Используется тестовый Telegram ID для разработки')
+	// }
+
+	if (userId) {
+		await usersStore.fetchUser(userId)
 		await usersStore.fetchAllTariffs()
 	} else {
-		setTimeout(() => {
-			if (route.path === '/openapp') {
-				return
-			} else {
-				showError('Ошибка app: Telegram_ID не найден. Пожалуйста, обратитесь в поддержку')
-			}
-		}, 100)
+		// Показываем ошибку только если это не страница /openapp
+		if (route.path !== '/openapp') {
+			console.error('Telegram user data:', { 
+				hasTg: !!tg, 
+				hasInitData: !!tg?.initData,
+				hasUser: !!user,
+				initDataUnsafe: tg?.initDataUnsafe 
+			})
+			showError('Не удалось получить данные пользователя. Попробуйте перезапустить приложение.')
+		}
 	}
+
+	// Убираем индикатор загрузки инициализации
+	isInitializing.value = false
 })
 </script>
 

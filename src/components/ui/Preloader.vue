@@ -10,9 +10,16 @@
 import { computed } from 'vue'
 import { useUsersStore } from '../../stores/index.js'
 
+const props = defineProps({
+    isInitializing: {
+        type: Boolean,
+        default: false
+    }
+})
+
 const usersStore = useUsersStore()
 
-const isLoading = computed(() => usersStore.isLoading)
+const isLoading = computed(() => usersStore.isLoading || props.isInitializing)
 </script>
 
 <style scoped lang="scss">
