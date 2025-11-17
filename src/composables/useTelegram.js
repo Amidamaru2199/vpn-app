@@ -1,9 +1,11 @@
 import { ref } from 'vue'
 
+// Глобальное состояние для userId (singleton)
+const user = ref(null)
+const userId = ref(null)
+
 export function useTelegram() {
     const tg = window.Telegram?.WebApp
-    const user = ref(null)
-    const userId = ref(null)
 
     const initTelegram = () => {
         if (tg) {
@@ -21,6 +23,13 @@ export function useTelegram() {
         // else {
         //     userId.value = 804746752 // Fallback когда Telegram WebApp API недоступен
         // }
+    }
+
+    // Метод для установки userId извне (для fallback с URL параметром)
+    const setUserId = (id) => {
+        if (id) {
+            userId.value = id
+        }
     }
 
     const showBackButton = (callback) => {
@@ -80,6 +89,7 @@ export function useTelegram() {
         user,
         userId,
         initTelegram,
+        setUserId,
         showBackButton,
         hideBackButton,
         showMainButton,

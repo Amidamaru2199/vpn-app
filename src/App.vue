@@ -30,7 +30,7 @@ import Preloader from './components/ui/Preloader.vue'
 
 const usersStore = useUsersStore()
 const { error: showError, toasts, remove: removeToast } = useToast()
-const { initTelegram, showBackButton } = useTelegram()
+const { initTelegram, showBackButton, setUserId } = useTelegram()
 const route = useRoute()
 const isInitializing = ref(true)
 
@@ -65,7 +65,7 @@ onMounted(async () => {
 	})
 
 	// Даём время Telegram WebApp инициализироваться
-	await new Promise(resolve => setTimeout(resolve, 2000))
+	await new Promise(resolve => setTimeout(resolve, 500))
 
 	const tg = window.Telegram?.WebApp
 	const user = tg?.initDataUnsafe?.user
@@ -73,7 +73,7 @@ onMounted(async () => {
 	// Попытка получить данные из разных источников
 	let userId = user?.id
 
-	// Альтернативный способ парсинга, если первый не сработал
+	// Способ 1: Парсинг через URLSearchParams (альтернативный способ из Telegram)
 	if (!userId && tg?.initData) {
 		try {
 			const params = new URLSearchParams(tg.initData)
@@ -87,6 +87,33 @@ onMounted(async () => {
 		}
 	}
 
+	// Способ 2: ID из start_param (для прямых ссылок Telegram)
+	if (!userId && tg?.initDataUnsafe?.start_param) {
+		const startParam = tg.initDataUnsafe.start_param
+		// Формат: uid_123456789 или просто 123456789
+		const match = startParam.match(/^(?:uid_)?(\d+)$/)
+		if (match) {
+			const parsedId = parseInt(match[1])
+			if (!isNaN(parsedId) && parsedId > 0) {
+				userId = parsedId
+				console.log('✅ Используется Telegram ID из start_param:', userId)
+			}
+		}
+	}
+
+	// Способ 3: ID из URL параметров (для веб-версии)
+	if (!userId) {
+		const urlParams = new URLSearchParams(window.location.search)
+		const userIdFromUrl = urlParams.get('user_id') || urlParams.get('tg_id')
+		if (userIdFromUrl) {
+			const parsedId = parseInt(userIdFromUrl)
+			if (!isNaN(parsedId) && parsedId > 0) {
+				userId = parsedId
+				console.log('✅ Используется Telegram ID из URL:', userId)
+			}
+		}
+	}
+
 	// Режим разработки - раскомментируйте если нужен тестовый ID
 	// if (!userId && import.meta.env.DEV) {
 	// 	userId = 804746752 // Тестовый ID для разработки
@@ -94,6 +121,9 @@ onMounted(async () => {
 	// }
 
 	if (userId) {
+		// Сохраняем userId глобально для доступа на всех страницах
+		setUserId(userId)
+		
 		await usersStore.fetchUser(userId)
 		await usersStore.fetchAllTariffs()
 	} else {
