@@ -1,20 +1,22 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getServers, updateUserMainServer, updateAutoPayments, updateEmail, getUser, getAllTariffs, paymentsCreate } from '../api/index.js'
-import { useToast } from '../composables/useToast'
+import { useToast } from '../composables/useToast.js'
+
+import type { Tariff } from '../types/tariff.js'
 
 export const useUsersStore = defineStore('users', () => {
 	const { success, error, modal } = useToast()
 	
 	const servers = ref([])
-	const allTariffs = ref([])
+	const allTariffs = ref<Tariff[]>([])
 	const user = ref(null)
 	const payments = ref(null)
 	const email = ref('')
 	const autoPayments = ref(false)
 	const isLoading = ref(false)
 
-	const fetchServers = async (tg_id) => {
+	const fetchServers = async (tg_id: number) => {
 		try {
 			isLoading.value = true
 			const data = await getServers(tg_id)
@@ -41,7 +43,7 @@ export const useUsersStore = defineStore('users', () => {
 		}
 	}
 
-	const fetchUser = async (tg_id) => {
+	const fetchUser = async (tg_id: number) => {
 		try {
 			isLoading.value = true
 			const data = await getUser(tg_id)
@@ -60,7 +62,7 @@ export const useUsersStore = defineStore('users', () => {
 	}
 
 	// ОБРАБОТЧИКИ
-	const toggleServerSelection = (serverId, isSelected) => {
+	const toggleServerSelection = (serverId: number, isSelected: boolean) => {
 		if (!servers.value?.servers) return
 
 		const server = servers.value.servers.find(s => s.id === serverId)
@@ -81,9 +83,11 @@ export const useUsersStore = defineStore('users', () => {
 	}
 
 	// POST
-	const createPayment = async (tg_id, tariff_id) => {
+	const createPayment = async (tg_id: number, tariff_id: number) => {
 		try {
 			const data = await paymentsCreate(tg_id, tariff_id)
+			console.log(data);
+			
 			payments.value = data.payment_info
 			return data
 		} catch (err) {
@@ -94,7 +98,7 @@ export const useUsersStore = defineStore('users', () => {
 	}
 
 	// PUT
-	const updateEmailSettings = async (tg_id, emailValue) => {
+	const updateEmailSettings = async (tg_id: number, emailValue: string) => {
 		try {
 			await updateEmail(tg_id, emailValue)
 			email.value = emailValue
@@ -107,7 +111,7 @@ export const useUsersStore = defineStore('users', () => {
 		}
 	}
 
-	const updateAutoPaymentsSettings = async (tg_id, value) => {
+	const updateAutoPaymentsSettings = async (tg_id: number, value: any) => {
 		try {
 			await updateAutoPayments(tg_id, value)
 			autoPayments.value = value
@@ -120,7 +124,7 @@ export const useUsersStore = defineStore('users', () => {
 		}
 	}
 
-	const saveSelectedServers = async (tg_id) => {
+	const saveSelectedServers = async (tg_id: number) => {
 		try {
 			const main_servers = getSelectedServerIds()
 			await updateUserMainServer(tg_id, main_servers)

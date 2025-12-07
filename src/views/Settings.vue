@@ -25,12 +25,12 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTelegram } from '../composables/useTelegram'
 import { usePlatform } from '../composables/usePlatform'
-import { useUsersStore } from '../stores/index.js'
+import { useUsersStore } from '../stores/index.ts'
 import { useToast } from '../composables/useToast'
 import Switch from '../components/ui/Switch.vue'
 
@@ -39,9 +39,9 @@ const usersStore = useUsersStore()
 const { userId, initTelegram, showBackButton } = useTelegram()
 const { detectPlatform } = usePlatform()
 const { error: showError } = useToast()
-const email = ref('')
+const email = ref<string>('')
 
-const toggleAutoPayments = async (value) => {
+const toggleAutoPayments = async (value: boolean) => {
     if (!userId.value) {
         showError('Ошибка: Telegram ID не найден 3. Пожалуйста, обратитесь в поддержку')
         return

@@ -8,7 +8,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useUsersStore } from '../../stores/index.js'
+import { useUsersStore } from '../../stores/index.ts'
 
 const props = defineProps({
     isInitializing: {

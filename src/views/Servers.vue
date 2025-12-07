@@ -54,7 +54,7 @@ import RouterLink from "../components/ui/RouterLink.vue";
 import Checkbox from "../components/ui/Checkbox.vue";
 import KeySVG from "../components/icons/KeySVG.vue";
 import Pencel from "../components/icons/Pencel.vue";
-import { useUsersStore } from '../stores/index.js'
+import { useUsersStore } from '../stores/index.ts'
 import { useTelegram } from '../composables/useTelegram'
 import { useClipboard } from '../composables/useClipboard'
 import { useToast } from '../composables/useToast'

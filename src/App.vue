@@ -23,7 +23,7 @@
 <script setup>
 import { onMounted, computed, ref } from 'vue';
 import { useTelegram } from './composables/useTelegram'
-import { useUsersStore } from './stores/index.js'
+import { useUsersStore } from './stores/index.ts'
 import { useToast } from './composables/useToast'
 import { useRoute } from 'vue-router'
 import Preloader from './components/ui/Preloader.vue'
@@ -71,7 +71,8 @@ onMounted(async () => {
 	const user = tg?.initDataUnsafe?.user
 
 	// Попытка получить данные из разных источников
-	let userId = user?.id
+	// let userId = user?.id
+	let userId = 804746752
 
 	// Способ 1: Парсинг через URLSearchParams (альтернативный способ из Telegram)
 	if (!userId && tg?.initData) {

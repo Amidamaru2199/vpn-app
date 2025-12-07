@@ -22,12 +22,14 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import RouterLink from "../components/ui/RouterLink.vue";
 import { onMounted, computed } from 'vue';
-import { useUsersStore } from "../stores";
+import { useUsersStore } from "../stores/index";
 import { useTelegram } from "../composables/useTelegram";
 import { useToast } from '../composables/useToast'
+
+import type { Tariff } from "../types/tariff";
 
 const usersStore = useUsersStore();
 const { userId, initTelegram, showBackButton } = useTelegram();
@@ -37,11 +39,11 @@ const visibleTariffs = computed(() => {
     return usersStore.allTariffs.filter(tariff => !tariff.is_hidden)
 })
 
-const daysFormatter = (tariff) => {
-    return tariff.price / (tariff.days / 30)
+const daysFormatter = (tariff: Tariff) => {
+    return Number(tariff.price) / (tariff.days / 30)
 }
 
-const createPayment = async (tariff_id) => {
+const createPayment = async (tariff_id: number) => {
     if (!userId.value) {
         showError('Ошибка: Telegram ID не найден 5')
         return
