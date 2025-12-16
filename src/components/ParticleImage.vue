@@ -12,7 +12,7 @@
             <!-- <p class="particle__title">Подписка активна</p> -->
             <h3 class="particle__subtitle">{{ subscriptionStatus }}</h3>
         </div>
-        <img class="particle__logo logo" id="logo" src="/img/ChatGPT Image 25 июл. 2025 г., 21_04_28.png" alt="">
+        <img class="particle__logo logo" id="logo" src="/img/smaspx.png" alt="">
         
         <!-- Динамические летящие частицы (только для тестового юзера) -->
         <div v-if="isGlowEnabled" class="particle__flying">
@@ -24,8 +24,6 @@
                     left: particle.x + 'px',
                     top: particle.y + 'px',
                     '--angle': particle.angle + 'deg',
-                    '--color-start': particle.colorStart,
-                    '--color-end': particle.colorEnd
                 }"
             ></span>
         </div>
@@ -64,16 +62,8 @@ let prevMousePosition = { x: 0, y: 0 }; // Для вычисления напр�
 let isMouseMoving = false;
 let mouseTimer = null;
 
-// Цвета частиц как у логотипа (красные и синие оттенки)
-const particleColors = [
-    { start: 'rgba(255, 80, 120, 0.9)', end: 'rgba(200, 50, 100, 0.7)' }, // Красный
-    { start: 'rgba(100, 150, 255, 0.9)', end: 'rgba(80, 120, 200, 0.7)' }, // Синий
-    { start: 'rgba(180, 100, 220, 0.9)', end: 'rgba(140, 80, 180, 0.7)' }, // Фиолетовый
-];
-
 // Создание частицы при движении мыши с учетом направления
 const createParticle = (x, y, directionX, directionY) => {
-    const colors = particleColors[Math.floor(Math.random() * particleColors.length)];
     
     // Вычисляем угол направления движения курсора
     let baseAngle = Math.atan2(directionY, directionX) * (180 / Math.PI);
@@ -92,8 +82,6 @@ const createParticle = (x, y, directionX, directionY) => {
         x,
         y,
         angle,
-        colorStart: colors.start,
-        colorEnd: colors.end
     };
     
     flyingParticles.value.push(particle);
