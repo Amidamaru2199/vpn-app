@@ -1,4 +1,4 @@
-const API_URL = 'https://app.adron-soft.ru'
+const API_URL = 'https://arachnet.ru:443/api'
 
 // GET
 export const getServers = async (tg_id) => {
@@ -22,9 +22,9 @@ export const getServers = async (tg_id) => {
 	}
 }
 
-export const getAllTariffs = async () => {
+export const getAllTariffs = async (tg_id) => {
 	try {
-		const response = await fetch(`${API_URL}/tariff/all`, {
+		const response = await fetch(`${API_URL}/user/tariffs/${tg_id}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -66,15 +66,16 @@ export const getUser = async (tg_id) => {
 
 // POST
 export const paymentsCreate = async (tg_id, tariff_id) => {
+	
 	try {
-		const response = await fetch(`${API_URL}/payments/create`, {
+		const response = await fetch(`${API_URL}/payment/create`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				telegram_id: tg_id,
-				tariff_id: tariff_id
+				tariff_id: tariff_id,
+				tg_id: tg_id
 			})
 		})
 
@@ -82,7 +83,7 @@ export const paymentsCreate = async (tg_id, tariff_id) => {
 			throw new Error(`HTTP error! status: ${response.status}`)
 		}
 
-		const data = await response.json()
+		const data = await response.text()
 		return data
 	} catch (e) {
 		console.error('paymentsCreate error:', e)
@@ -93,13 +94,13 @@ export const paymentsCreate = async (tg_id, tariff_id) => {
 // PUT
 export const updateEmail = async (tg_id, email) => {
 	try {
-		const response = await fetch(`${API_URL}/user/email`, {
+		const response = await fetch(`${API_URL}/user/update/email`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				tgID: tg_id,
+				tg_id: tg_id,
 				email: email
 			})
 		})
@@ -118,13 +119,13 @@ export const updateEmail = async (tg_id, email) => {
 
 export const updateAutoPayments = async (tg_id, is_auto_payments) => {
 	try {
-		const response = await fetch(`${API_URL}/user/autopay`, {
+		const response = await fetch(`${API_URL}/user/update/autopay`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				tgID: tg_id,
+				tg_id: tg_id,
 				is_auto_pay: is_auto_payments
 			})
 		})

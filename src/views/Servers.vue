@@ -6,14 +6,14 @@
             <button class="servers__link" @click="toggleEditMode">
                 <Pencel />
                 <template v-if="isEditMode">
-                    Готово ({{ usersStore.getSelectedServersCount() }}/{{ usersStore.servers?.max_servers || 6 }})
+                    Готово ({{ usersStore.getSelectedServersCount() }}/{{ usersStore.maxServers || 6 }})
                 </template>
                 <template v-else>
                     Редактировать набор серверов в подписке
                 </template>
             </button>
 
-            <RouterLink component="div" v-for="server in usersStore.servers?.servers || []" :key="server.id"
+            <RouterLink component="div" v-for="server in usersStore.servers || []" :key="server.id"
                 :class="{ 'router-link_active': server.is_main && isEditMode, 'router-link_clickable': isEditMode, 'router-link_border-active': server.is_main }"
                 @click="isEditMode ? handleServerClick(server.id) : copyToClipboard(server.key, 'Ключ сервера скопирован!')">
                 <template #icon>
@@ -81,8 +81,8 @@ const getFlagEmoji = (code) => {
 
 // Функция для сохранения исходного состояния серверов
 const saveOriginalServerStates = () => {
-    if (usersStore.servers?.servers) {
-        originalServerStates.value = usersStore.servers.servers.map(server => ({
+    if (usersStore?.servers) {
+        originalServerStates.value = usersStore.servers.map(server => ({
             id: server.id,
             is_main: server.is_main
         }))
@@ -91,11 +91,11 @@ const saveOriginalServerStates = () => {
 
 // Функция для проверки изменений
 const hasServerChanges = () => {
-    if (!originalServerStates.value || !usersStore.servers?.servers) {
+    if (!originalServerStates.value || !usersStore?.servers) {
         return false
     }
 
-    const currentStates = usersStore.servers.servers.map(server => ({
+    const currentStates = usersStore.servers.map(server => ({
         id: server.id,
         is_main: server.is_main
     }))
@@ -106,9 +106,9 @@ const hasServerChanges = () => {
 
 // Функция для сброса изменений к исходному состоянию
 const resetServerChanges = () => {
-    if (originalServerStates.value && usersStore.servers?.servers) {
+    if (originalServerStates.value && usersStore?.servers) {
         originalServerStates.value.forEach(originalState => {
-            const server = usersStore.servers.servers.find(s => s.id === originalState.id)
+            const server = usersStore.servers.find(s => s.id === originalState.id)
             if (server) {
                 server.is_main = originalState.is_main
             }
@@ -151,14 +151,14 @@ const toggleEditMode = async () => {
 }
 
 const handleServerClick = (serverId) => {
-    const server = usersStore.servers?.servers?.find(s => s.id === serverId)
+    const server = usersStore.servers?.find(s => s.id === serverId)
     if (!server) return
 
     handleServerSelect(serverId, !server.is_main)
 }
 
 const handleServerSelect = (serverId, value) => {
-    const maxServers = usersStore.servers?.max_servers || 6
+    const maxServers = usersStore.maxServers || 6
     const currentSelectedCount = usersStore.getSelectedServersCount()
 
     if (value && currentSelectedCount >= maxServers) {

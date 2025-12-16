@@ -71,7 +71,8 @@ onMounted(async () => {
 	const user = tg?.initDataUnsafe?.user
 
 	// Попытка получить данные из разных источников
-	let userId = user?.id
+	// let userId = user?.id
+	let userId = 1024324171
 
 	// Способ 1: Парсинг через URLSearchParams (альтернативный способ из Telegram)
 	if (!userId && tg?.initData) {
@@ -125,7 +126,7 @@ onMounted(async () => {
 		setUserId(userId)
 		
 		await usersStore.fetchUser(userId)
-		await usersStore.fetchAllTariffs()
+		await usersStore.fetchAllTariffs(userId)
 	} else {
 		// Показываем ошибку только если это не страница /openapp
 		if (route.path !== '/openapp') {

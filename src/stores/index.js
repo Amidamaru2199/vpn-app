@@ -7,6 +7,7 @@ export const useUsersStore = defineStore('users', () => {
 	const { success, error, modal } = useToast()
 	
 	const servers = ref([])
+	const maxServers = ref(0)
 	const allTariffs = ref([])
 	const user = ref(null)
 	const payments = ref(null)
@@ -18,7 +19,12 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			isLoading.value = true
 			const data = await getServers(tg_id)
+			console.log('data', data);
+			
 			servers.value = data.servers
+			maxServers.value = data.max_servers_count
+			console.log(servers.value);
+			
 		} catch (err) {
 			error(`Ошибка при загрузке серверов: ${err}`)
 			console.error('Failed to fetch servers:', err)
@@ -28,11 +34,13 @@ export const useUsersStore = defineStore('users', () => {
 		}
 	}
 
-	const fetchAllTariffs = async () => {
+	const fetchAllTariffs = async (tg_id) => {
 		try {
 			isLoading.value = true
-			const data = await getAllTariffs()
+			const data = await getAllTariffs(tg_id)
 			allTariffs.value = data.tariffs
+			console.log(allTariffs.value);
+			
 		} catch (err) {
 			error(`Ошибка при загрузке тарифов: ${err}`)
 			console.error('Failed to fetch tariffs:', err)
@@ -45,11 +53,11 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			isLoading.value = true
 			const data = await getUser(tg_id)
-			user.value = data.user
+			user.value = data
 
 			if (data) {
-				autoPayments.value = data.user.is_auto_payment || false
-				email.value = data.user.email || ''
+				autoPayments.value = data.is_auto_pay || false
+				email.value = data.email || ''
 			}
 		} catch (err) {
 			error(`Ошибка при загрузке данных пользователя`)
@@ -61,9 +69,9 @@ export const useUsersStore = defineStore('users', () => {
 
 	// ОБРАБОТЧИКИ
 	const toggleServerSelection = (serverId, isSelected) => {
-		if (!servers.value?.servers) return
+		if (!servers.value) return
 
-		const server = servers.value.servers.find(s => s.id === serverId)
+		const server = servers.value.find(s => s.id === serverId)
 
 		if (server) {
 			server.is_main = isSelected
@@ -71,20 +79,22 @@ export const useUsersStore = defineStore('users', () => {
 	}
 
 	const getSelectedServersCount = () => {
-		if (!servers.value?.servers) return 0
-		return servers.value.servers.filter(s => s.is_main).length
+		if (!servers.value) return 0
+		return servers.value.filter(s => s.is_main).length
 	}
 
 	const getSelectedServerIds = () => {
-		if (!servers.value?.servers) return []
-		return servers.value.servers.filter(s => s.is_main).map(s => s.id)
+		if (!servers.value) return []
+		return servers.value.filter(s => s.is_main).map(s => s.id)
 	}
 
 	// POST
 	const createPayment = async (tg_id, tariff_id) => {
 		try {
 			const data = await paymentsCreate(tg_id, tariff_id)
-			payments.value = data.payment_info
+			
+			payments.value = data
+			
 			return data
 		} catch (err) {
 			error(`Ошибка при создании платежа: ${err}`)
@@ -134,6 +144,7 @@ export const useUsersStore = defineStore('users', () => {
 	}
 
 	return {
+		maxServers,
 		servers,
 		allTariffs,
 		user,

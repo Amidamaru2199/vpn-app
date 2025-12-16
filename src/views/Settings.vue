@@ -16,6 +16,7 @@
                 <span class="settings__value">Email для чеков</span>
                 <label class="settings__label" for="email">Укажите email, на который будут отправляться чеки после
                     оплаты</label>
+                <label class="settings__label" for="email">Действующий email: {{ usersStore.email }}</label>
                 <input class="settings__input" id="email" name="email" type="email" v-model="email"
                     placeholder="example@example.com" />
                 <button class="settings__button" type="submit">Сохранить</button>

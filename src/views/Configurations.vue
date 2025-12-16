@@ -40,7 +40,7 @@ const installProfile = () => {
 		return
 	}
 
-	const configUrl = `https://app.adron-soft.ru/key/main/${userId.value}`
+	const configUrl = `https://arachnet.ru:443/api/user/keys/${userId.value}`
 	const platform = currentPlatform.value || 'unknown'
 	
 	// Формируем полный URL для страницы OpenApp
@@ -66,7 +66,7 @@ const copySubscriptionLink = () => {
 		return
 	}
 
-	const subscriptionUrl = `https://app.adron-soft.ru/key/main/${userId.value}`
+	const subscriptionUrl = `https://arachnet.ru:443/api/user/keys/${userId.value}`
 	copyToClipboard(subscriptionUrl, `Ссылка на подписку скопирована! Откройте ${isWindows.value ? 'Hiddify' : 'V2Raytun'} и вставьте её вручную.`)
 }
 

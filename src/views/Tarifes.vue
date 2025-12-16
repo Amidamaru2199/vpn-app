@@ -2,13 +2,13 @@
     <div class="tarifes container">
         <h3 class="tarifes__title">Продление подписки</h3>
         <p class="tarifes__subtitle">Выберите тариф:</p>
-        <div v-if="visibleTariffs.length > 0" class="tarifes__links">
-            <RouterLink component="div" v-for="tariff in visibleTariffs" :key="tariff.id"
+        <div v-if="usersStore.allTariffs.length > 0" class="tarifes__links">
+            <RouterLink component="div" v-for="tariff in usersStore.allTariffs" :key="tariff.id"
                 @click="createPayment(tariff.id)">
                 <template #text>
                     <div class="tarifes__router-link-text">
-                        <span class="tarifes__router-link-duration">{{ tariff.name }} за {{ tariff.price }} руб.</span>
-                        <span class="tarifes__router-link-price">{{ daysFormatter(tariff) }} руб в месяц</span>
+                        <span class="tarifes__router-link-duration">{{ tariff.title }}</span>
+                        <span v-if="tariff.discount" class="tarifes__router-link-price">{{ tariff.discount }}</span>
                     </div>
                 </template>
             </RouterLink>
@@ -24,7 +24,7 @@
 
 <script setup>
 import RouterLink from "../components/ui/RouterLink.vue";
-import { onMounted, computed } from 'vue';
+import { onMounted } from 'vue';
 import { useUsersStore } from "../stores";
 import { useTelegram } from "../composables/useTelegram";
 import { useToast } from '../composables/useToast'
@@ -32,14 +32,6 @@ import { useToast } from '../composables/useToast'
 const usersStore = useUsersStore();
 const { userId, initTelegram, showBackButton } = useTelegram();
 const { error: showError } = useToast()
-
-const visibleTariffs = computed(() => {
-    return usersStore.allTariffs.filter(tariff => !tariff.is_hidden)
-})
-
-const daysFormatter = (tariff) => {
-    return tariff.price / (tariff.days / 30)
-}
 
 const createPayment = async (tariff_id) => {
     if (!userId.value) {
@@ -49,8 +41,8 @@ const createPayment = async (tariff_id) => {
     
     await usersStore.createPayment(userId.value, tariff_id)
 
-    if (usersStore.payments?.confirmation?.confirmation_url) {
-        const confirmationUrl = usersStore.payments.confirmation.confirmation_url
+    if (usersStore.payments) {
+        const confirmationUrl = usersStore.payments
 
         const tg = window.Telegram?.WebApp
         if (tg && tg.openLink) {
