@@ -2,7 +2,7 @@
 	<div class="openapp container">
 		<img class="openapp__logo" src="/img/atom.png" alt="vpn">
 		<h2 class="openapp__title">
-			Если приложение {{ isWindows ? 'Hiddify' : 'V2Raytun' }} не открылось
+			Если приложение {{ isWindows ? 'Happ' : 'V2Raytun' }} не открылось
 		</h2>
 		<p class="openapp__subtitle">Убедитесь, что оно установлено, или скопируйте и вставьте ключ вручную.</p>
 
@@ -15,7 +15,7 @@
 		</button>
 
 		<button @click="openStore" class="openapp__button">
-			Установить {{ isWindows ? 'Hiddify' : 'V2Raytun' }}
+			Установить {{ isWindows ? 'Happ' : 'V2Raytun' }}
 		</button>
 
 		<a href="https://t.me/adronVpnBot" target="_blank" class="openapp__link">
@@ -75,7 +75,7 @@ onMounted(async () => {
 		} else if (isAndroid.value) {
 			appURL.value = `intent://import/${key}#Intent;scheme=v2raytun;package=com.v2raytun.android;end`
 		} else if (isWindows.value) {
-			appURL.value = `hiddify://import/${key}`
+			appURL.value = `happ://import/${key}`
 		}
 
 		isLoading.value = false

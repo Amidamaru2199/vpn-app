@@ -125,7 +125,8 @@ onMounted(async () => {
 		setUserId(userId)
 		
 		await usersStore.fetchUser(userId)
-		await usersStore.fetchAllTariffs()
+		// Загружаем все тарифы включая крипто
+		await usersStore.fetchAllTariffs(true)
 	} else {
 		// Показываем ошибку только если это не страница /openapp
 		if (route.path !== '/openapp') {

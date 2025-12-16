@@ -22,9 +22,10 @@ export const getServers = async (tg_id) => {
 	}
 }
 
-export const getAllTariffs = async () => {
+export const getAllTariffs = async (includeCrypto = false) => {
 	try {
-		const response = await fetch(`${API_URL}/tariff/all`, {
+		const cryptoParam = includeCrypto ? 'true' : 'false'
+		const response = await fetch(`${API_URL}/tariff/all?crypto=${cryptoParam}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -86,6 +87,34 @@ export const paymentsCreate = async (tg_id, tariff_id) => {
 		return data
 	} catch (e) {
 		console.error('paymentsCreate error:', e)
+		throw e
+	}
+}
+
+// Создание invoice для оплаты через CryptoBot
+export const createCryptoInvoice = async (tg_id, tariff_id, amount, tariff_name) => {
+	try {
+		const response = await fetch(`${API_URL}/cryptobot/create-invoice`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				tg_id: tg_id.toString(),
+				tariff_id: tariff_id,
+				amount: parseFloat(amount),
+				tariff_name: tariff_name
+			})
+		})
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`)
+		}
+
+		const data = await response.json()
+		return data
+	} catch (e) {
+		console.error('createCryptoInvoice error:', e)
 		throw e
 	}
 }
